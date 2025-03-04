@@ -7,7 +7,8 @@ import {
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
 
-import "./tailwind.css";
+// Import Bootstrap CSS
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -31,8 +32,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
-        {children}
+      <body className="bg-light">
+        <div className="container-fluid">
+          {children}
+        </div>
         <ScrollRestoration />
         <Scripts />
       </body>
