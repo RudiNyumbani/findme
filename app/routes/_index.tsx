@@ -9,10 +9,10 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div className="d-flex vh-100 align-items-center justify-content-center">
+    <div className="d-flex vh-100 align-items-center justify-content-center bg-dark text-white">
       <div className="d-flex flex-column align-items-center gap-4">
         <header className="d-flex flex-column align-items-center gap-3">
-          <h1 className="h2 fw-bold text-dark text-center">
+          <h1 className="h2 fw-bold text-white text-center">
             Welcome to <span className="visually-hidden">Remix</span>
           </h1>
           <div className="text-center" style={{ width: '434px', height: '144px' }}>
@@ -28,8 +28,8 @@ export default function Index() {
             />
           </div>
         </header>
-        <nav className="d-flex flex-column align-items-center border rounded-3 p-3">
-          <p className="text-muted mb-3">What&apos;s next?</p>
+        <nav className="d-flex flex-column align-items-center border border-secondary rounded-3 p-3">
+          <p className="text-white mb-3">What&apos;s next?</p>
           <ul className="list-unstyled">
             {resources.map(({ href, text, icon }) => (
               <li key={href}>
