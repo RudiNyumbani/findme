@@ -1,4 +1,5 @@
 import {
+  Link,
   Links,
   Meta,
   Outlet,
@@ -11,8 +12,16 @@ import type { LinksFunction } from "@remix-run/node";
 // Import Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
 
-// Ensure Bootstrap JS loads only in the browser
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: "/styles/bootstrap.css" },
+  { rel: "stylesheet", href: "/styles/global.css" },
+];
+
 export function Layout({ children }: { children: React.ReactNode }) {
+// Ensure Bootstrap JS loads only in the browser
+// Import Bootstrap JavaScript bundle manually since we're serving our own files 
+// instead of using a CDN. This ensures all Bootstrap components (e.g., dropdowns, modals) work.
+// We're using a dynamic import to avoid TypeScript errors related to missing type definitions.
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap.bundle.min.js");
   }, []);
@@ -23,13 +32,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
-        <Links />
+        <Links /> {/* Remix will inject styles from `links()` here */}
       </head>
       <body className="bg-dark text-white">
         {/* Navbar */}
         <nav className="navbar navbar-expand-lg p-3 mb-2 bg-white">
           <div className="container-fluid">
-            <a className="navbar-brand" href="#">Navbar</a>
+            <Link className="navbar-brand" to="#">Navbar</Link>
             <button
               className="navbar-toggler"
               type="button"
@@ -44,30 +53,30 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                 <li className="nav-item">
-                  <a className="nav-link active" aria-current="page" href="#">Home</a>
+                  <Link className="nav-link active" aria-current="page" to="#">Home</Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#">Link</a>
+                  <Link className="nav-link" to="#">Link</Link>
                 </li>
                 <li className="nav-item dropdown">
-                  <a
+                  <Link
                     className="nav-link dropdown-toggle"
-                    href="#"
+                    to="#"
                     role="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
                     Dropdown
-                  </a>
+                  </Link>
                   <ul className="dropdown-menu">
-                    <li><a className="dropdown-item" href="#">Action</a></li>
-                    <li><a className="dropdown-item" href="#">Another action</a></li>
+                    <li><Link className="dropdown-item" to="#">Action</Link></li>
+                    <li><Link className="dropdown-item" to="#">Another action</Link></li>
                     <li><hr className="dropdown-divider" /></li>
-                    <li><a className="dropdown-item" href="#">Something else here</a></li>
+                    <li><Link className="dropdown-item" to="#">Something else here</Link></li>
                   </ul>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link disabled" aria-disabled="true">Disabled</a>
+                  <Link className="nav-link disabled" aria-disabled="true" to={"#"}>Disabled</Link>
                 </li>
               </ul>
               <form className="d-flex" role="search">
