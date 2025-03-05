@@ -13,8 +13,8 @@ import type { LinksFunction } from "@remix-run/node";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: "/styles/bootstrap.css" },
-  { rel: "stylesheet", href: "/styles/global.css" },
+  // Haven't found a usecase for this just yet
+  // but keeping it just incase I find one and to keep remix happy!
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
