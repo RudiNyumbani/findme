@@ -1,12 +1,18 @@
-# Welcome to Remix!
+# FindMe - Missing Persons Reporting and Tracking System
 
-- 📖 [Remix docs](https://remix.run/docs)
+FindMe is a web application designed to help report and track missing persons. It provides an easy-to-use interface for submitting reports, updating case statuses, and searching for reported cases.
+
+## Features
+- Report missing persons with relevant details
+- Search and filter reported cases
+- Track case progress and updates
+- User-friendly interface powered by Remix and Bootstrap
 
 ## Development
 
 Run the dev server:
 
-```shellscript
+```sh
 npm run dev
 ```
 
@@ -37,4 +43,9 @@ Make sure to deploy the output of `npm run build`
 
 ## Styling
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+This project uses [Bootstrap](https://getbootstrap.com/) for styling, ensuring a responsive and visually appealing design. You can modify or extend the styles as needed.
+
+---
+
+📖 [Remix Docs](https://remix.run/docs)
+
