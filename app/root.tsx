@@ -11,6 +11,8 @@ import type { LinksFunction } from "@remix-run/node";
 
 // Import Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
+// Import styling for DataTables globaly
+import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 
 export const links: LinksFunction = () => [
   // Haven't found a usecase for this just yet
