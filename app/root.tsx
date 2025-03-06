@@ -9,6 +9,8 @@ import {
 import { useEffect } from "react";
 import type { LinksFunction } from "@remix-run/node";
 
+import Footer from "~/components/footer"; // Import Footer
+
 // Import Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
 // Import styling for DataTables globaly
@@ -36,7 +38,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links /> {/* Remix will inject styles from `links()` here */}
       </head>
-      <body className="bg-dark text-white">
+      <body className="bg-dark text-white d-flex flex-column min-vh-100">
         {/* Navbar */}
         <nav className="navbar navbar-expand-lg p-3 mb-2 bg-white fixed-top">
           <div className="container-fluid">
@@ -120,9 +122,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 
         {/* Page Content */}
-        <div className="container-fluid">
+        <main className="flex-grow-1">
           {children}
-        </div>
+        </main>
+        <Footer />
 
         <ScrollRestoration />
         <Scripts />
