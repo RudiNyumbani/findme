@@ -40,7 +40,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {/* Navbar */}
         <nav className="navbar navbar-expand-lg p-3 mb-2 bg-white">
           <div className="container-fluid">
-            <Link className="navbar-brand" to="#">Navbar</Link>
+            <Link className="navbar-brand" to="#">FindMe</Link>
             <button
               className="navbar-toggler"
               type="button"
