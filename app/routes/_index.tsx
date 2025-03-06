@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "datatables.net-bs5"; // Import Bootstrap 5 DataTables
 import DataTable from "datatables.net";
+import "datatables.net-bs5/css/dataTables.bootstrap5.min.css"; // For styling purposes
 
 export const meta: MetaFunction = () => {
   return [
