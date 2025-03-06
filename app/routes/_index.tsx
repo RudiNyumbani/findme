@@ -13,9 +13,10 @@ export const meta: MetaFunction = () => {
 
 export default function MissingPersonsTable() {
   useEffect(() => {
-    //import("bootstrap/dist/js/bootstrap.bundle.min.js");
     // Initialize DataTable once the component mounts
-    const table = new DataTable("#missingPersonsTable");
+    const table = new DataTable("#missingPersonsTable", {
+      paging: true,
+    });
     return () => {
       table.destroy();
     }; // Cleanup when unmounting
@@ -31,7 +32,6 @@ export default function MissingPersonsTable() {
             <th>Age</th>
             <th>Last Seen</th>
             <th>Contact</th>
-            <th>last name</th>
           </tr>
         </thead>
         <tbody>
@@ -40,6 +40,66 @@ export default function MissingPersonsTable() {
             <td>25</td>
             <td>Nairobi, Kenya</td>
             <td>+254712345678</td>
+          </tr>
+          <tr>
+            <td>Jane Smith</td>
+            <td>30</td>
+            <td>Mombasa, Kenya</td>
+            <td>+254798765432</td>
+          </tr>
+          <tr>
+            <td>Jane Smith</td>
+            <td>30</td>
+            <td>Mombasa, Kenya</td>
+            <td>+254798765432</td>
+          </tr>
+          <tr>
+            <td>John Doe</td>
+            <td>25</td>
+            <td>Nairobi, Kenya</td>
+            <td>+254712345678</td>
+          </tr>
+          <tr>
+            <td>John Doe</td>
+            <td>25</td>
+            <td>Nairobi, Kenya</td>
+            <td>+254712345678</td>
+          </tr>
+          <tr>
+            <td>John Doe</td>
+            <td>25</td>
+            <td>Nairobi, Kenya</td>
+            <td>+254712345678</td>
+          </tr>
+          <tr>
+            <td>John Doe</td>
+            <td>25</td>
+            <td>Nairobi, Kenya</td>
+            <td>+254712345678</td>
+          </tr>
+          <tr>
+            <td>Jane Smith</td>
+            <td>30</td>
+            <td>Mombasa, Kenya</td>
+            <td>+254798765432</td>
+          </tr>
+          <tr>
+            <td>Jane Smith</td>
+            <td>30</td>
+            <td>Mombasa, Kenya</td>
+            <td>+254798765432</td>
+          </tr>
+          <tr>
+            <td>Jane Smith</td>
+            <td>30</td>
+            <td>Mombasa, Kenya</td>
+            <td>+254798765432</td>
+          </tr>
+          <tr>
+            <td>Jane Smith</td>
+            <td>30</td>
+            <td>Mombasa, Kenya</td>
+            <td>+254798765432</td>
           </tr>
           <tr>
             <td>Jane Smith</td>
