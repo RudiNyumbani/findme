@@ -38,7 +38,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body className="bg-dark text-white">
         {/* Navbar */}
-        <nav className="navbar navbar-expand-lg p-3 mb-2 bg-white">
+        <nav className="navbar navbar-expand-lg p-3 mb-2 bg-white fixed-top">
           <div className="container-fluid">
             <Link className="navbar-brand" to="#">FindMe</Link>
             <button
