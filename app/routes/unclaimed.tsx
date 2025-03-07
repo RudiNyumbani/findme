@@ -5,15 +5,15 @@ import DataTable from "datatables.net";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Missing Persons" },
+    { title: "Unclaimed Persons" },
     { name: "description", content: "Welcome to FindMe!" },
   ];
 };
 
-export default function MissingPersonsTable() {
+export default function UnclaimedPersonsTable() {
   useEffect(() => {
     // Initialize DataTable once the component mounts
-    const table = new DataTable("#missingPersonsTable", {
+    const table = new DataTable("#unclaimedPersonsTable", {
       paging: true,
       autoWidth: false,
     });
@@ -25,8 +25,8 @@ export default function MissingPersonsTable() {
   return (
     <div className="container mt-4">
       <div className="table-responsive"> {/* Ensures the table is scrollable on small screens */}
-      <h2 className="mt-5">Missing Persons</h2>
-      <table id="missingPersonsTable" className="table table-striped table-bordered">
+      <h2 className="mt-5">Unclaimed Persons</h2>
+      <table id="unclaimedPersonsTable" className="table table-striped table-bordered">
         <thead>
           <tr>
             <th>Case #</th>
