@@ -78,13 +78,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <div className="offcanvas-body">
                 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                   <li className="nav-item">
-                    <Link className="nav-link active" to="#">Missing Persons</Link>
+                    <Link className="nav-link active" to="/">Missing Persons</Link>
                   </li>
                   <li className="nav-item">
-                    <Link className="nav-link" to="#">Unidentified Persons</Link>
+                    <Link className="nav-link" to="/unidentified">Unidentified Persons</Link>
                   </li>
                   <li className="nav-item">
-                    <Link className="nav-link" to="#">Unclaimed Persons</Link>
+                    <Link className="nav-link" to="/unclaimed">Unclaimed Persons</Link>
                   </li>
                 </ul>
 
