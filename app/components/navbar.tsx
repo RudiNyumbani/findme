@@ -59,7 +59,7 @@ export default function Navbar() {
             </ul>
 
             {/* New Report Button */}
-            <Link className="btn btn-primary me-3" to="#">New Report</Link>
+            <Link className="btn btn-primary me-3" to="/new-report">New Report</Link>
 
             {/* Language Dropdown, Register & Login */}
             <ul className="navbar-nav">
