@@ -23,7 +23,7 @@ export default function UnidentifiedPersonsTable() {
   }, []);
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-5">
       <div className="table-responsive"> {/* Ensures the table is scrollable on small screens */}
       <h2 className="mt-5">Unidentifed Persons</h2>
       <table id="unidentifiedPersonsTable" className="table table-striped table-bordered">

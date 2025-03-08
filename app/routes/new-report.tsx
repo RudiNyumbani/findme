@@ -21,7 +21,7 @@ export default function NewReportForm() {
   };
 
   return (
-    <div className="container pt-5 mt-4">
+    <div className="container pt-5 mt-5">
       <h2 className="mb-4">New Missing Person Report</h2>
       <form>
         {/* Basic Info Section */}
@@ -70,9 +70,15 @@ export default function NewReportForm() {
         </div>
 
         {/* Advanced Info - Collapsible Section */}
-        <button className="btn btn-secondary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#advancedInfo">
-          Advanced Info
-        </button>
+        {/* Button Row - Advanced Info & Submit */}
+        <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+          <button className="btn btn-secondary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#advancedInfo">
+            Advanced Info
+          </button>
+          {/* Submit Button */}
+          <button type="submit" className="btn btn-primary mt-3 mt-md-0">Submit Report</button>
+        </div>
+
         <div className="collapse" id="advancedInfo">
           <div className="card card-body">
             <div className="mb-3">
@@ -102,8 +108,6 @@ export default function NewReportForm() {
           </div>
         </div>
 
-        {/* Submit Button */}
-        <button type="submit" className="btn btn-primary mt-3">Submit Report</button>
       </form>
     </div>
   );
