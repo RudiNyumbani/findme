@@ -71,15 +71,16 @@ export default function NewReportForm() {
 
         {/* Advanced Info - Collapsible Section */}
         {/* Button Row - Advanced Info & Submit */}
-        <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
-          <button className="btn btn-secondary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#advancedInfo">
+        {/* Advanced Info & Submit - Aligned Together */}
+        <div className="d-flex align-items-center gap-3 mt-3 flex-wrap">
+          <button className="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#advancedInfo">
             Advanced Info
           </button>
-          {/* Submit Button */}
-          <button type="submit" className="btn btn-primary mt-3 mt-md-0">Submit Report</button>
+          <button type="submit" className="btn btn-primary">Submit Report</button>
         </div>
 
-        <div className="collapse" id="advancedInfo">
+        {/* Advanced Info - Collapsible Section */}
+        <div className="collapse mt-3" id="advancedInfo">
           <div className="card card-body">
             <div className="mb-3">
               <label htmlFor="pydesc" className="form-label">Physical Description</label>
