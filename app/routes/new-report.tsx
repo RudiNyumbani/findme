@@ -21,8 +21,8 @@ export default function NewReportForm() {
   };
 
   return (
-    <div className="container mt-4">
-      <h2>New Missing Person Report</h2>
+    <div className="container pt-5 mt-4">
+      <h2 className="mb-4">New Missing Person Report</h2>
       <form>
         {/* Basic Info Section */}
         <div className="mb-3">
