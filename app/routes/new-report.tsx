@@ -15,9 +15,9 @@ export default function NewReportForm() {
     return age;
   };
 
-  const handleDobChange = (e) => {
+  const handleDobChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDob(e.target.value);
-    setAge(calculateAge(e.target.value));
+    setAge(calculateAge(e.target.value).toString()); // Convert numbe to string
   };
 
   return (
@@ -26,24 +26,24 @@ export default function NewReportForm() {
       <form>
         {/* Basic Info Section */}
         <div className="mb-3">
-          <label className="form-label">Legal First Name</label>
-          <input type="text" className="form-control" required />
+          <label htmlFor="firstname" className="form-label">Legal First Name</label>
+          <input type="text" id="firstname" className="form-control" required />
         </div>
         <div className="mb-3">
-          <label className="form-label">Legal Last Name</label>
-          <input type="text" className="form-control" required />
+          <label htmlFor="lastname" className="form-label">Legal Last Name</label>
+          <input type="text" id="lastanme" className="form-control" required />
         </div>
         <div className="mb-3">
-          <label className="form-label">Date of Birth</label>
-          <input type="date" className="form-control" value={dob} onChange={handleDobChange} required />
+          <label htmlFor="dob"className="form-label">Date of Birth</label>
+          <input type="date" id="dob" className="form-control" value={dob} onChange={handleDobChange} required />
         </div>
         <div className="mb-3">
-          <label className="form-label">Age</label>
-          <input type="text" className="form-control" value={age} readOnly />
+          <label htmlFor="age" className="form-label">Age</label>
+          <input type="text" id="age" className="form-control" value={age} readOnly placeholder="Age should appear here"/>
         </div>
         <div className="mb-3">
-          <label className="form-label">Gender</label>
-          <select className="form-control" required>
+          <label htmlFor="gender" className="form-label">Gender</label>
+          <select id="gender" className="form-control" required>
             <option value="">Select...</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
@@ -51,22 +51,22 @@ export default function NewReportForm() {
           </select>
         </div>
         <div className="mb-3">
-          <label className="form-label">Town/Location</label>
-          <input type="text" className="form-control" required />
+          <label htmlFor="location" className="form-label">Town/Location</label>
+          <input type="text" id="location" className="form-control" required />
         </div>
         <div className="mb-3">
-          <label className="form-label">Date of Last Contact</label>
-          <input type="date" className="form-control" required />
+          <label htmlFor="dlc" className="form-label">Date of Last Contact</label>
+          <input type="date" id="dlc" className="form-control" required />
         </div>
 
         {/* Reporter Info */}
         <div className="mb-3">
-          <label className="form-label">Reporter’s Name (Optional)</label>
-          <input type="text" className="form-control" />
+          <label htmlFor="repname"className="form-label">Reporter’s Name (Optional)</label>
+          <input type="text" id="repname" className="form-control" />
         </div>
         <div className="mb-3">
-          <label className="form-label">Reporter’s Contact (Optional)</label>
-          <input type="text" className="form-control" />
+          <label htmlFor="repcontact"className="form-label">Reporter’s Contact (Optional)</label>
+          <input type="text" id="repcontact" className="form-control" />
         </div>
 
         {/* Advanced Info - Collapsible Section */}
@@ -76,28 +76,28 @@ export default function NewReportForm() {
         <div className="collapse" id="advancedInfo">
           <div className="card card-body">
             <div className="mb-3">
-              <label className="form-label">Physical Description</label>
-              <textarea className="form-control"></textarea>
+              <label htmlFor="pydesc" className="form-label">Physical Description</label>
+              <textarea id="pydesc" className="form-control"></textarea>
             </div>
             <div className="mb-3">
-              <label className="form-label">Last Seen Wearing</label>
-              <textarea className="form-control"></textarea>
+              <label htmlFor="lstwear" className="form-label">Last Seen Wearing</label>
+              <textarea id="lstwear" className="form-control"></textarea>
             </div>
             <div className="mb-3">
-              <label className="form-label">Medical Conditions</label>
-              <textarea className="form-control"></textarea>
+              <label htmlFor="medcon" className="form-label">Medical Conditions</label>
+              <textarea id="medcon" className="form-control"></textarea>
             </div>
             <div className="mb-3">
-              <label className="form-label">Emergency Contacts</label>
-              <textarea className="form-control"></textarea>
+              <label htmlFor="emcont" className="form-label">Emergency Contacts</label>
+              <textarea id="emcont" className="form-control"></textarea>
             </div>
             <div className="mb-3">
-              <label className="form-label">Possible Locations</label>
-              <textarea className="form-control"></textarea>
+              <label htmlFor="posloc" className="form-label">Possible Locations</label>
+              <textarea id="posloc" className="form-control"></textarea>
             </div>
             <div className="mb-3">
-              <label className="form-label">Circumstances</label>
-              <textarea className="form-control"></textarea>
+              <label htmlFor="circ" className="form-label">Circumstances</label>
+              <textarea id="circ" className="form-control"></textarea>
             </div>
           </div>
         </div>
