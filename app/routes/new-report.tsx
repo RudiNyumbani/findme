@@ -76,7 +76,7 @@ export default function NewReportForm() {
           <button className="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#advancedInfo">
             Advanced Info
           </button>
-          <button type="submit" className="btn btn-primary">Submit Report</button>
+          
         </div>
 
         {/* Advanced Info - Collapsible Section */}
@@ -108,7 +108,7 @@ export default function NewReportForm() {
             </div>
           </div>
         </div>
-
+        <button type="submit" className="btn btn-primary mt-3 mb-3">Submit Report</button>
       </form>
     </div>
   );
