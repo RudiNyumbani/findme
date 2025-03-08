@@ -69,19 +69,17 @@ export default function NewReportForm() {
           <input type="text" id="repcontact" className="form-control" />
         </div>
 
-        {/* Advanced Info - Collapsible Section */}
-        {/* Button Row - Advanced Info & Submit */}
-        {/* Advanced Info & Submit - Aligned Together */}
+        {/* Advanced Info - Button*/}
         <div className="d-flex align-items-center gap-3 mt-3 flex-wrap">
           <button className="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#advancedInfo">
             Advanced Info
           </button>
-          
         </div>
 
         {/* Advanced Info - Collapsible Section */}
         <div className="collapse mt-3" id="advancedInfo">
-          <div className="card card-body">
+        {/*Remove the default card border and set a dark background for a seamless look*/}
+          <div className="card card-body bg-dark text-white" style={{ border: "none", backgroundColor: "#343a40" }}>
             <div className="mb-3">
               <label htmlFor="pydesc" className="form-label">Physical Description</label>
               <textarea id="pydesc" className="form-control"></textarea>
