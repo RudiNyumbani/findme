@@ -17,6 +17,7 @@ const Login = () => {
           </div>
           <div className="d-flex justify-content-between mb-3">
             <Link to="/forgot-password" prefetch="intent" className="text-decoration-none">Forgot Password?</Link>
+            <Link to="/register" prefetch="intent" className="text-decoration-none">Register?</Link>
           </div>
           <button type="submit" className="btn btn-primary w-100">Login</button>
         </form>
