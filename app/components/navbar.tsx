@@ -59,7 +59,7 @@ export default function Navbar() {
             </ul>
 
             {/* New Report Button */}
-            <Link className="btn btn-primary me-3" to="/new-report">New Report</Link>
+            <Link prefetch="intent" className="btn btn-primary me-3" to="/new-report">New Report</Link>
 
             {/* Language Dropdown, Register & Login */}
             <ul className="navbar-nav">
@@ -79,10 +79,10 @@ export default function Navbar() {
                 </ul>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/register">Register</Link>
+                <Link prefetch="intent" className="nav-link" to="/register">Register</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/login">Login</Link>
+                <Link prefetch="intent" className="nav-link" to="/login">Login</Link>
               </li>
             </ul>
           </div>
