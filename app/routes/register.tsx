@@ -3,7 +3,7 @@ import { Link } from '@remix-run/react';
 const Register = () => {
   return (
     <div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: "#212529" }}>
-      <div className="card p-4" style={{ minWidth: '300px', maxWidth: '400px', backgroundColor: '#343a40', color: 'white' }}>
+      <div className="card p-4" style={{ minWidth: '400px', maxWidth: '400px', backgroundColor: '#343a40', color: 'white' }}>
         <h3 className="text-center mb-4">Register</h3>
         <form>
           <div className="mb-3">
