@@ -16,7 +16,7 @@ const Login = () => {
             <input type="password" id="password" className="form-control" placeholder="Enter your password" required />
           </div>
           <div className="d-flex justify-content-between mb-3">
-            <Link to="#" prefetch="intent" className="text-decoration-none">Forgot Password?</Link>
+            <Link to="/forgot-password" prefetch="intent" className="text-decoration-none">Forgot Password?</Link>
           </div>
           <button type="submit" className="btn btn-primary w-100">Login</button>
         </form>
