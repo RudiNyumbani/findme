@@ -24,9 +24,11 @@ export default function TestRoute() {
   }
 
   return (
-    <div>
-      <h1>Test Data</h1>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+    <div className="container mt-5">
+        <div className="table-responsive">
+            <h1 className="mt-5">Test Data</h1>
+        </div>
+        <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
   );
 }
