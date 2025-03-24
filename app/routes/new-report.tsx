@@ -17,8 +17,11 @@ export default function NewReportForm() {
 
   const handleDobChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDob(e.target.value);
-    setAge(calculateAge(e.target.value).toString()); // Convert numbe to string
+    setAge(calculateAge(e.target.value).toString());
   };
+
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split("T")[0];
 
   return (
     <div className="container pt-5 mt-5">
@@ -31,11 +34,21 @@ export default function NewReportForm() {
         </div>
         <div className="mb-3">
           <label htmlFor="lastname" className="form-label">Legal Last Name</label>
-          <input type="text" id="lastanme" className="form-control" required />
+          <input type="text" id="lastname" className="form-control" required />
         </div>
         <div className="mb-3">
-          <label htmlFor="dob"className="form-label">Date of Birth</label>
-          <input type="date" id="dob" className="form-control" value={dob} onChange={handleDobChange} required />
+          <label htmlFor="dob" className="form-label">Date of Birth</label>
+          <input
+            type="date"
+            id="dob"
+            className="form-control"
+            value={dob}
+            onChange={handleDobChange}
+            style={{ cursor: "pointer" }} // Make the entire input field clickable
+            onClick={(e) => (e.target as HTMLInputElement).showPicker()} // This triggers the date picker
+            max={today} // Prevent future dates
+            required
+          />
         </div>
         <div className="mb-3">
           <label htmlFor="age" className="form-label">Age</label>
@@ -52,20 +65,28 @@ export default function NewReportForm() {
         </div>
         <div className="mb-3">
           <label htmlFor="location" className="form-label">Town/Location</label>
-          <input type="text" id="location" className="form-control" required />
+          <input type="text" id="location" className="form-control" required placeholder="Last seen location" />
         </div>
         <div className="mb-3">
           <label htmlFor="dlc" className="form-label">Date of Last Contact</label>
-          <input type="date" id="dlc" className="form-control" required />
+          <input
+            type="date"
+            id="dlc"
+            className="form-control"
+            style={{ cursor: "pointer" }} // Make the entire input field clickable
+            onClick={(e) => (e.target as HTMLInputElement).showPicker()} // This triggers the date picker
+            max={today} // Prevent future dates
+            required
+          />
         </div>
 
         {/* Reporter Info */}
         <div className="mb-3">
-          <label htmlFor="repname"className="form-label">Reporter’s Name (Optional)</label>
+          <label htmlFor="repname" className="form-label">Reporter’s Name (Optional)</label>
           <input type="text" id="repname" className="form-control" />
         </div>
         <div className="mb-3">
-          <label htmlFor="repcontact"className="form-label">Reporter’s Contact (Optional)</label>
+          <label htmlFor="repcontact" className="form-label">Reporter’s Contact (Optional)</label>
           <input type="text" id="repcontact" className="form-control" />
         </div>
 
@@ -78,7 +99,6 @@ export default function NewReportForm() {
 
         {/* Advanced Info - Collapsible Section */}
         <div className="collapse mt-3" id="advancedInfo">
-        {/*Remove the default card border and set a dark background for a seamless look*/}
           <div className="card card-body bg-dark text-white" style={{ border: "none", backgroundColor: "#343a40" }}>
             <div className="mb-3">
               <label htmlFor="pydesc" className="form-label">Physical Description</label>
