@@ -20,43 +20,55 @@ export default function NewReportForm() {
     setAge(calculateAge(e.target.value).toString());
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target as HTMLFormElement);
+
+    const data = Object.fromEntries(formData.entries());
+
+    console.log("Submitted Data:", data);
+    alert("Form submitted successfully!");
+  };
+
   // Get today's date in YYYY-MM-DD format
   const today = new Date().toISOString().split("T")[0];
 
   return (
     <div className="container pt-5 mt-5">
       <h2 className="mb-4">New Missing Person Report</h2>
-      <form>
+      <form onSubmit={handleSubmit}>
         {/* Basic Info Section */}
         <div className="mb-3">
           <label htmlFor="firstname" className="form-label">Legal First Name</label>
-          <input type="text" id="firstname" className="form-control" required />
+          <input type="text" name="firstname" id="firstname" className="form-control" required />
         </div>
         <div className="mb-3">
           <label htmlFor="lastname" className="form-label">Legal Last Name</label>
-          <input type="text" id="lastname" className="form-control" required />
+          <input type="text" name="lastname" id="lastname" className="form-control" required />
         </div>
         <div className="mb-3">
           <label htmlFor="dob" className="form-label">Date of Birth</label>
           <input
             type="date"
+            name="dob"
             id="dob"
             className="form-control"
             value={dob}
             onChange={handleDobChange}
-            style={{ cursor: "pointer" }} // Make the entire input field clickable
-            onClick={(e) => (e.target as HTMLInputElement).showPicker()} // This triggers the date picker
-            max={today} // Prevent future dates
+            style={{ cursor: "pointer" }}
+            onClick={(e) => (e.target as HTMLInputElement).showPicker()}
+            max={today}
             required
           />
         </div>
         <div className="mb-3">
           <label htmlFor="age" className="form-label">Age</label>
-          <input type="text" id="age" className="form-control" value={age} readOnly placeholder="Age should appear here"/>
+          <input type="text" name="age" id="age" className="form-control" value={age} readOnly placeholder="Age should appear here" />
         </div>
         <div className="mb-3">
           <label htmlFor="gender" className="form-label">Gender</label>
-          <select id="gender" className="form-control" required>
+          <select name="gender" id="gender" className="form-control" required>
             <option value="">Select...</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
@@ -65,17 +77,18 @@ export default function NewReportForm() {
         </div>
         <div className="mb-3">
           <label htmlFor="location" className="form-label">Town/Location</label>
-          <input type="text" id="location" className="form-control" required placeholder="Last seen location" />
+          <input type="text" name="location" id="location" className="form-control" required placeholder="Last seen location" />
         </div>
         <div className="mb-3">
           <label htmlFor="dlc" className="form-label">Date of Last Contact</label>
           <input
             type="date"
+            name="dlc"
             id="dlc"
             className="form-control"
-            style={{ cursor: "pointer" }} // Make the entire input field clickable
-            onClick={(e) => (e.target as HTMLInputElement).showPicker()} // This triggers the date picker
-            max={today} // Prevent future dates
+            style={{ cursor: "pointer" }}
+            onClick={(e) => (e.target as HTMLInputElement).showPicker()}
+            max={today}
             required
           />
         </div>
@@ -83,14 +96,14 @@ export default function NewReportForm() {
         {/* Reporter Info */}
         <div className="mb-3">
           <label htmlFor="repname" className="form-label">Reporter’s Name (Optional)</label>
-          <input type="text" id="repname" className="form-control" />
+          <input type="text" name="repname" id="repname" className="form-control" />
         </div>
         <div className="mb-3">
           <label htmlFor="repcontact" className="form-label">Reporter’s Contact (Optional)</label>
-          <input type="text" id="repcontact" className="form-control" />
+          <input type="text" name="repcontact" id="repcontact" className="form-control" />
         </div>
 
-        {/* Advanced Info - Button*/}
+        {/* Advanced Info - Button */}
         <div className="d-flex align-items-center gap-3 mt-3 flex-wrap">
           <button className="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#advancedInfo">
             Advanced Info
@@ -99,30 +112,30 @@ export default function NewReportForm() {
 
         {/* Advanced Info - Collapsible Section */}
         <div className="collapse mt-3" id="advancedInfo">
-          <div className="card card-body bg-dark text-white" style={{ border: "none", backgroundColor: "#343a40" }}>
+          <div className="card card-body bg-dark text-white">
             <div className="mb-3">
               <label htmlFor="pydesc" className="form-label">Physical Description</label>
-              <textarea id="pydesc" className="form-control"></textarea>
+              <textarea name="pydesc" id="pydesc" className="form-control"></textarea>
             </div>
             <div className="mb-3">
               <label htmlFor="lstwear" className="form-label">Last Seen Wearing</label>
-              <textarea id="lstwear" className="form-control"></textarea>
+              <textarea name="lstwear" id="lstwear" className="form-control"></textarea>
             </div>
             <div className="mb-3">
               <label htmlFor="medcon" className="form-label">Medical Conditions</label>
-              <textarea id="medcon" className="form-control"></textarea>
+              <textarea name="medcon" id="medcon" className="form-control"></textarea>
             </div>
             <div className="mb-3">
               <label htmlFor="emcont" className="form-label">Emergency Contacts</label>
-              <textarea id="emcont" className="form-control"></textarea>
+              <textarea name="emcont" id="emcont" className="form-control"></textarea>
             </div>
             <div className="mb-3">
               <label htmlFor="posloc" className="form-label">Possible Locations</label>
-              <textarea id="posloc" className="form-control"></textarea>
+              <textarea name="posloc" id="posloc" className="form-control"></textarea>
             </div>
             <div className="mb-3">
               <label htmlFor="circ" className="form-label">Circumstances</label>
-              <textarea id="circ" className="form-control"></textarea>
+              <textarea name="circ" id="circ" className="form-control"></textarea>
             </div>
           </div>
         </div>
