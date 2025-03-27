@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "~/utils/supabaseClient"; // Get the supabaseclient
 
 export default function NewReportForm() {
   const [dob, setDob] = useState("");
@@ -19,6 +20,26 @@ export default function NewReportForm() {
     setDob(e.target.value);
     setAge(calculateAge(e.target.value).toString());
   };
+
+// Mapping object to map form fields to Supabase columns
+  const formToSupabaseMap: Record<string, string> = {
+    firstname: "legal_first_name",
+    lastname: "legal_last_name",
+    dob: "date_of_birth",
+    age: "age",
+    gender: "gender",
+    location: "town_location",
+    dlc: "date_of_last_contact",
+    repname: "reporter_name",
+    repcontact: "reporter_contact",
+    pydesc: "physical_description",
+    lstwear: "last_seen_wearing",
+    medcon: "medical_conditions",
+    emcont: "emergency_contacts",
+    posloc: "possible_locations",
+    circ: "circumstances",
+  };
+  
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
