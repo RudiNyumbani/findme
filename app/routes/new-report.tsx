@@ -1,7 +1,44 @@
 import { useState } from "react";
 import { supabase } from "~/utils/supabaseClient"; // Get the supabaseclient
+import { json } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
+
+
+
+export async function action({ request }) {
+  const formData = await request.formData();
+  const dataObject = Object.fromEntries(formData.entries());
+
+  const supabaseData = {
+    legal_first_name: dataObject.firstname,
+    legal_last_name: dataObject.lastname,
+    date_of_birth: dataObject.dob,
+    age: dataObject.age,
+    gender: dataObject.gender,
+    town_location: dataObject.location,
+    date_of_last_contact: dataObject.dlc,
+    reporter_name: dataObject.repname || null,
+    reporter_contact: dataObject.repcontact || null,
+    physical_description: dataObject.pydesc || null,
+    last_seen_wearing: dataObject.lstwear || null,
+    medical_conditions: dataObject.medcon || null,
+    emergency_contacts: dataObject.emcont || null,
+    possible_locations: dataObject.posloc || null,
+    circumstances: dataObject.circ || null,
+  };
+
+  const { error } = await supabase.from("missing_persons").insert([supabaseData]);
+
+  if (error) {
+    return json({ success: false, error: error.message }, { status: 400 });
+  }
+
+  return json({ success: true });
+}
+
 
 export default function NewReportForm() {
+  const fetcher = useFetcher();
   const [dob, setDob] = useState("");
   const [age, setAge] = useState("");
 
@@ -21,68 +58,13 @@ export default function NewReportForm() {
     setAge(calculateAge(e.target.value).toString());
   };
 
-
-  /*
-   * Handles the form submission event by transforming the form data to match
-   * the column names in the Supabase database, and then inserts the data into
-   * the database.
-   */
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.target as HTMLFormElement);
-    const dataObject = Object.fromEntries(formData.entries());
-
-    console.log("Submitted Data:", dataObject);
-
-    // Transform form data to match Supabase column names
-    const supabaseData = {
-      legal_first_name: dataObject.firstname,
-      legal_last_name: dataObject.lastname,
-      date_of_birth: dataObject.dob,
-      age: dataObject.age,
-      gender: dataObject.gender,
-      town_location: dataObject.location,
-      date_of_last_contact: dataObject.dlc,
-      reporter_name: dataObject.repname || null,
-      reporter_contact: dataObject.repcontact || null,
-      physical_description: dataObject.pydesc || null,
-      last_seen_wearing: dataObject.lstwear || null,
-      medical_conditions: dataObject.medcon || null,
-      emergency_contacts: dataObject.emcont || null,
-      possible_locations: dataObject.posloc || null,
-      circumstances: dataObject.circ || null,
-    };
-
-    console.log("Data to be sent to Supabase:", supabaseData);
-     // Insert into Supabase
-    try {
-      const { data, error } = await supabase
-        .from("missing_persons") // Change to your actual table name
-        .insert([supabaseData]);
-
-      if (error) {
-      console.error("Error inserting data:", error.message);
-      alert("Failed to submit the report.");
-      } else {
-      console.log("Successfully submitted data:", data);
-      alert("Report submitted successfully!");
-      }
-    } catch (error) {
-      console.error("Error inserting data:", error);
-      alert("An error occurred. Please try again.");
-    }
-  };
-
-
-
   // Get today's date in YYYY-MM-DD format
   const today = new Date().toISOString().split("T")[0];
 
   return (
     <div className="container pt-5 mt-5">
       <h2 className="mb-4">New Missing Person Report</h2>
-      <form onSubmit={handleSubmit}>
+      <fetcher.Form method="post">
         {/* Basic Info Section */}
         <div className="mb-3">
           <label htmlFor="firstname" className="form-label">Legal First Name</label>
@@ -184,8 +166,14 @@ export default function NewReportForm() {
             </div>
           </div>
         </div>
-        <button type="submit" className="btn btn-primary mt-3 mb-3">Submit Report</button>
-      </form>
+        <button type="submit" className="btn btn-primary mt-3 mb-3" disabled={fetcher.state !== "idle"}>
+          {fetcher.state === "submitting" ? "Submitting..." : "Submit Report"}
+        </button>
+        
+        {/* Success/Error Message */}
+        {fetcher.data?.success && <p className="text-successs mt-3">Report submitted successfully!</p>}
+        {fetcher.data?.error && <p className="text-danger mt-3">Error: {fetcher.data.error}</p>}
+      </fetcher.Form>
     </div>
   );
 }
