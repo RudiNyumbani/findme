@@ -4,7 +4,7 @@ export default function Navbar() {
   const location = useLocation(); // Get current path
 
   return (
-    <nav className="navbar navbar-expand-lg p-3 mb-2 bg-white fixed-top">
+    <nav className="navbar navbar-expand-lg p-2 mb-2 bg-white fixed-top">
       <div className="container-fluid">
         {/* Brand */}
         <Link className="navbar-brand" to="/">FindMe</Link>
