@@ -21,36 +21,60 @@ export default function NewReportForm() {
     setAge(calculateAge(e.target.value).toString());
   };
 
-// Mapping object to map form fields to Supabase columns
-  const formToSupabaseMap: Record<string, string> = {
-    firstname: "legal_first_name",
-    lastname: "legal_last_name",
-    dob: "date_of_birth",
-    age: "age",
-    gender: "gender",
-    location: "town_location",
-    dlc: "date_of_last_contact",
-    repname: "reporter_name",
-    repcontact: "reporter_contact",
-    pydesc: "physical_description",
-    lstwear: "last_seen_wearing",
-    medcon: "medical_conditions",
-    emcont: "emergency_contacts",
-    posloc: "possible_locations",
-    circ: "circumstances",
-  };
-  
 
-  const handleSubmit = (e: React.FormEvent) => {
+  /*
+   * Handles the form submission event by transforming the form data to match
+   * the column names in the Supabase database, and then inserts the data into
+   * the database.
+   */
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const formData = new FormData(e.target as HTMLFormElement);
+    const dataObject = Object.fromEntries(formData.entries());
 
-    const data = Object.fromEntries(formData.entries());
+    console.log("Submitted Data:", dataObject);
 
-    console.log("Submitted Data:", data);
-    alert("Form submitted successfully!");
+    // Transform form data to match Supabase column names
+    const supabaseData = {
+      legal_first_name: dataObject.firstname,
+      legal_last_name: dataObject.lastname,
+      date_of_birth: dataObject.dob,
+      age: dataObject.age,
+      gender: dataObject.gender,
+      town_location: dataObject.location,
+      date_of_last_contact: dataObject.dlc,
+      reporter_name: dataObject.repname || null,
+      reporter_contact: dataObject.repcontact || null,
+      physical_description: dataObject.pydesc || null,
+      last_seen_wearing: dataObject.lstwear || null,
+      medical_conditions: dataObject.medcon || null,
+      emergency_contacts: dataObject.emcont || null,
+      possible_locations: dataObject.posloc || null,
+      circumstances: dataObject.circ || null,
+    };
+
+    console.log("Data to be sent to Supabase:", supabaseData);
+     // Insert into Supabase
+    try {
+      const { data, error } = await supabase
+        .from("missing_persons") // Change to your actual table name
+        .insert([supabaseData]);
+
+      if (error) {
+      console.error("Error inserting data:", error.message);
+      alert("Failed to submit the report.");
+      } else {
+      console.log("Successfully submitted data:", data);
+      alert("Report submitted successfully!");
+      }
+    } catch (error) {
+      console.error("Error inserting data:", error);
+      alert("An error occurred. Please try again.");
+    }
   };
+
+
 
   // Get today's date in YYYY-MM-DD format
   const today = new Date().toISOString().split("T")[0];
