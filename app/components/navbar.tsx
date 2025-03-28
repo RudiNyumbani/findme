@@ -59,7 +59,7 @@ export default function Navbar() {
             </ul>
 
             {/* New Report Button */}
-            <Link prefetch="intent" className="btn btn-primary me-3" to="/new-report">New Report</Link>
+            <Link prefetch="intent" className="btn btn-primary me-3" to="/new-report">Report Missing Person</Link>
 
             {/* Language Dropdown, Register & Login */}
             <ul className="navbar-nav">
