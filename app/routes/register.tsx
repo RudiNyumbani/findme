@@ -2,6 +2,17 @@ import { useActionData, Form, Link, useNavigation } from "@remix-run/react";
 import { ActionFunctionArgs, redirect, json } from "@remix-run/node";
 import { supabase } from "~/utils/supabaseClient"; // Server-side Supabase client
 
+  /**
+   * Handle public user registration.
+   *
+   * This function validates the form data and signs the user up with Supabase Auth.
+   * If successful, it inserts the user's details into the `profiles` table and
+   * redirects to the dashboard.  If there are any errors, it returns a JSON response
+   * with a 400 or 500 status code.
+   *
+   * @param {ActionFunctionArgs} args - Remix action function arguments
+   * @returns {Promise<Response>} - JSON response with validation errors, or redirect
+   */
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const username = formData.get("username") as string;
@@ -37,6 +48,19 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return redirect("/dashboard"); // Redirect after successful signup
 };
 
+  /**
+   * A Remix route component for handling user registration.
+   *
+   * Displays a form for users to register with a username, email, and password.
+   * When the form is submitted, it calls the `action` function to handle signing
+   * up the user with Supabase Auth and inserting their details into the profiles
+   * table.
+   * 
+   * If there are any errors during the signup process, it displays an error message
+   * above the form.  If the signup is successful, it redirects to the dashboard.
+   * 
+   * @returns {JSX.Element} - The rendered registration form
+   */
 export default function Register() {
   const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
