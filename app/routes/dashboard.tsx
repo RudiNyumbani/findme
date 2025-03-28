@@ -12,7 +12,7 @@ export default function Dashboard() {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <div className={`container py-5 ${darkMode ? "bg-dark text-light" : ""}`}>
+    <div  className={`container py-5 mt-5 ${darkMode ? "bg-dark text-light" : ""}`}>
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold">👋 Welcome, {user.name}!</h2>
