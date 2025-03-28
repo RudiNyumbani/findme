@@ -133,7 +133,7 @@ export default function NewReportForm() {
         {/* Advanced Info - Button */}
         <div className="d-flex align-items-center gap-3 mt-3 flex-wrap">
           <button className="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#advancedInfo">
-            Advanced Info
+            More Info
           </button>
         </div>
 
