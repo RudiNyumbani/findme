@@ -70,11 +70,26 @@ export default function MissingPersonsTable() {
         </thead>
 
         <tbody>
-          {missingPersons.map((person) => {
+        {/**  Iterates over the `missingPersons` array and renders a table row for each person.
+            * Each `person` object is expected to have non-nullable properties corresponding 
+            * to the missing persons data fetched from Supabase. It maps over the `missingPersons` array 
+            * and extracts relevant details for each person.
+            * The provided inline type definition ensures proper type checking for each `person` object.
+            * This helps prevent TypeScript errors by explicitly defining the expected properties.
+        */}
+          {missingPersons.map((person: {
+            tracking_number: string;
+            date_of_last_contact: string;
+            legal_last_name: string;
+            legal_first_name: string;
+            age: number;
+            gender: string;
+            town_location: string;
+          }) => {
             // Format date to DD/MM/YYYY
             const formattedDate = person.date_of_last_contact
             ? new Date(person.date_of_last_contact).toLocaleDateString("en-GB").replace(/\//g, "/")
-            : "";
+            : "N/A";
             return(
             <tr key={person.tracking_number}>
               <td>{person.tracking_number}</td>
