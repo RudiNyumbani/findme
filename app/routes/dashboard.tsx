@@ -17,7 +17,7 @@ export default function Dashboard() {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold">👋 Welcome, {user.name}!</h2>
         <div>
-          <span className="me-3 text-muted">Last login: {user.lastLogin}</span>
+          <span className="me-3 ">Last login: {user.lastLogin}</span>
           <button
             onClick={() => setDarkMode(!darkMode)}
             className="btn btn-outline-secondary"
@@ -73,7 +73,7 @@ export default function Dashboard() {
         <Link to="/track" className="btn btn-lg btn-secondary w-100">
           🔎 Search & Track
         </Link>
-        <Link to="/profile" className="btn btn-lg btn-outline-dark w-100">
+        <Link to="/profile" className="btn btn-lg btn-light w-100">
           👤 View Profile
         </Link>
       </div>
