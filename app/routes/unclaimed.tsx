@@ -12,6 +12,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+
 // Fetch unclaimed persons data from supabase
 export const loader: LoaderFunction = async () => {
   const { data, error } = await supabase
@@ -19,7 +20,7 @@ export const loader: LoaderFunction = async () => {
     .select("tracking_number, date_of_death, age, legal_last_name, legal_first_name, gender, current_status, found_location");
 
   if (error) {
-    // This is for debugging remover in prod and handle errors properly
+    // This is for debugging remove in prod and handle errors properly
     console.error("Error fecthing unclaimed persons:", error.message);
     return [];
   }
@@ -110,5 +111,3 @@ export default function UnclaimedPersonsTable() {
     </div>
   );
 }
-
-
