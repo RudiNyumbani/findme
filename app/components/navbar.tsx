@@ -41,17 +41,17 @@ export default function Navbar() {
 
           <div className="offcanvas-body">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
+              <li className="nav-item fw-bold">
                 <Link prefetch="intent" className={`nav-link ${location.pathname === "/" ? "active" : ""}`} to="/">
                   Missing Persons
                 </Link>
               </li>
-              <li className="nav-item">
+              <li className="nav-item fw-bold">
                 <Link prefetch="intent" className={`nav-link ${location.pathname === "/unidentified" ? "active" : ""}`} to="/unidentified">
                   Unidentified Persons
                 </Link>
               </li>
-              <li className="nav-item">
+              <li className="nav-item fw-bold">
                 <Link prefetch="intent" className={`nav-link ${location.pathname === "/unclaimed" ? "active" : ""}`} to="/unclaimed">
                   Unclaimed Persons
                 </Link>
