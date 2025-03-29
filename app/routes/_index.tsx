@@ -1,7 +1,9 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { MetaFunction, LoaderFunction} from "@remix-run/node";
 import { useEffect } from "react";
 import "datatables.net-bs5"; // Import Bootstrap 5 DataTables
 import DataTable from "datatables.net";
+import { useLoaderData } from "@remix-run/react";
+import { supabase } from "~/utils/supabaseClient";
 
 export const meta: MetaFunction = () => {
   return [
@@ -10,7 +12,35 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+
+// Fetch missing persons data from Supabase
+export const loader: LoaderFunction = async () => {
+  const { data, error } = await supabase
+    .from("missing_persons")
+    .select("date_of_last_contact, legal_last_name, legal_first_name, age, gender, town_location, tracking_number");
+
+  if (error) {
+    console.error("Error fetching missing persons:", error.message);
+    return [];
+  }
+
+  return data;
+};
+
+
+/**
+ * Renders a table displaying missing persons data.
+ *
+ * This component fetches data from a Supabase database using the `useLoaderData` hook.
+ * It initializes a DataTable for enhanced table functionalities like sorting 
+ * and filtering. The table is made responsive for small screens.
+ *
+ * @returns {JSX.Element} A responsive table of missing persons data.
+ */
+
 export default function MissingPersonsTable() {
+  const missingPersons = useLoaderData<typeof loader>();
+
   useEffect(() => {
     // Initialize DataTable once the component mounts
     const table = new DataTable("#missingPersonsTable", {
@@ -29,7 +59,7 @@ export default function MissingPersonsTable() {
       <table id="missingPersonsTable" className="table table-striped table-bordered">
         <thead>
           <tr>
-            <th>Case</th>
+            <th>Tracking Number</th>
             <th>DLC</th>
             <th>Legal Last Name</th>
             <th>Legal First Name</th>
@@ -38,27 +68,21 @@ export default function MissingPersonsTable() {
             <th>Town</th>
           </tr>
         </thead>
+
         <tbody>
-          {/* Sample Row */}
-          <tr>
-            <td>001</td>
-            <td>01/03/2024</td>
-            <td>Doe</td>
-            <td>John</td>
-            <td>30</td>
-            <td>Male</td>
-            <td>Nairobi</td>
-          </tr>
-          <tr>
-            <td>001</td>
-            <td>01/03/2024</td>
-            <td>Doe</td>
-            <td>John</td>
-            <td>30</td>
-            <td>Male</td>
-            <td>Nairobi</td>
-          </tr>
+          {missingPersons.map((person) => (
+            <tr key={person.tracking_number}>
+              <td>{person.tracking_number}</td>
+              <td>{person.date_of_last_contact}</td>
+              <td>{person.legal_last_name}</td>
+              <td>{person.legal_first_name}</td>
+              <td>{person.age}</td>
+              <td>{person.gender}</td>
+              <td>{person.town_location}</td>
+            </tr>
+          ))}
         </tbody>
+
       </table>
       </div>
     </div>
