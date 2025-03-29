@@ -50,8 +50,8 @@ export default function UnclaimedPersonsTable() {
             <td>Nairobi</td>
             <td>01/03/2024</td>
             <td>05/03/2024</td>
-          </tr>
-      
+          </tr>  
+          
         </tbody>
       </table>
       </div>
