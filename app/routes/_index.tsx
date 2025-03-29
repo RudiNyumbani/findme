@@ -14,7 +14,7 @@ export default function MissingPersonsTable() {
   useEffect(() => {
     // Initialize DataTable once the component mounts
     const table = new DataTable("#missingPersonsTable", {
-      paging: true,
+      paging: false,
       autoWidth: false,
     });
     return () => {
@@ -29,109 +29,35 @@ export default function MissingPersonsTable() {
       <table id="missingPersonsTable" className="table table-striped table-bordered">
         <thead>
           <tr>
-            <th>Case #</th>
+            <th>Case</th>
+            <th>DLC</th>
             <th>Legal Last Name</th>
             <th>Legal First Name</th>
             <th>Missing Age</th>
             <th>Gender</th>
             <th>Town</th>
-            <th>Date of Last Contact</th>
-            <th>Date Modified</th>
           </tr>
         </thead>
         <tbody>
           {/* Sample Row */}
           <tr>
             <td>001</td>
+            <td>01/03/2024</td>
             <td>Doe</td>
             <td>John</td>
             <td>30</td>
             <td>Male</td>
             <td>Nairobi</td>
-            <td>01/03/2024</td>
-            <td>05/03/2024</td>
           </tr>
           <tr>
             <td>001</td>
+            <td>01/03/2024</td>
             <td>Doe</td>
             <td>John</td>
             <td>30</td>
             <td>Male</td>
             <td>Nairobi</td>
-            <td>01/03/2024</td>
-            <td>05/03/2024</td>
           </tr>
-          <tr>
-            <td>001</td>
-            <td>Doe</td>
-            <td>John</td>
-            <td>30</td>
-            <td>Male</td>
-            <td>Nairobi</td>
-            <td>01/03/2024</td>
-            <td>05/03/2024</td>
-          </tr>
-          <tr>
-            <td>001</td>
-            <td>Doe</td>
-            <td>John</td>
-            <td>30</td>
-            <td>Male</td>
-            <td>Nairobi</td>
-            <td>01/03/2024</td>
-            <td>05/03/2024</td>
-          </tr>
-          <tr>
-            <td>001</td>
-            <td>Doe</td>
-            <td>John</td>
-            <td>30</td>
-            <td>Male</td>
-            <td>Nairobi</td>
-            <td>01/03/2024</td>
-            <td>05/03/2024</td>
-          </tr>
-          <tr>
-            <td>001</td>
-            <td>Doe</td>
-            <td>John</td>
-            <td>30</td>
-            <td>Male</td>
-            <td>Nairobi</td>
-            <td>01/03/2024</td>
-            <td>05/03/2024</td>
-          </tr>
-          <tr>
-            <td>001</td>
-            <td>Doe</td>
-            <td>James</td>
-            <td>30</td>
-            <td>Male</td>
-            <td>Nairobi</td>
-            <td>01/03/2024</td>
-            <td>05/03/2024</td>
-          </tr>
-          <tr>
-            <td>001</td>
-            <td>Doe</td>
-            <td>John</td>
-            <td>30</td>
-            <td>Male</td>
-            <td>Nairobi</td>
-            <td>01/03/2024</td>
-            <td>05/03/2024</td>
-          </tr>
-          <tr>
-            <td>001</td>
-            <td>Doe</td>
-            <td>John</td>
-            <td>30</td>
-            <td>Male</td>
-            <td>Nairobi</td>
-            <td>01/03/2024</td>
-            <td>05/03/2024</td>
-          </tr>
-          
         </tbody>
       </table>
       </div>
