@@ -44,7 +44,10 @@ Make sure to deploy the output of `npm run build`
 ## Styling
 
 This project uses [Bootstrap](https://getbootstrap.com/) for styling, ensuring a responsive and visually appealing design. You can modify or extend the styles as needed.
-
+---
+### PS
+// This code sucks, you know it and I know it.<br>
+// Move on and call me an idiot later.
 ---
 
 📖 [Remix Docs](https://remix.run/docs)
