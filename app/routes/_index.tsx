@@ -60,7 +60,7 @@ export default function MissingPersonsTable() {
         <thead>
           <tr>
             <th>Tracking Number</th>
-            <th>DLC</th>
+            <th title="Date of Last Contact">DLC</th> {/* Tooltip on hover */}
             <th>Legal Last Name</th>
             <th>Legal First Name</th>
             <th>Missing Age</th>
@@ -70,17 +70,24 @@ export default function MissingPersonsTable() {
         </thead>
 
         <tbody>
-          {missingPersons.map((person) => (
+          {missingPersons.map((person) => {
+            // Format date to DD/MM/YYYY
+            const formattedDate = person.date_of_last_contact
+            ? new Date(person.date_of_last_contact).toLocaleDateString("en-GB").replace(/\//g, "/")
+            : "";
+            return(
             <tr key={person.tracking_number}>
               <td>{person.tracking_number}</td>
-              <td>{person.date_of_last_contact}</td>
+              <td>{formattedDate}</td>
               <td>{person.legal_last_name}</td>
               <td>{person.legal_first_name}</td>
               <td>{person.age}</td>
               <td>{person.gender}</td>
               <td>{person.town_location}</td>
             </tr>
-          ))}
+            );
+          })}
+
         </tbody>
 
       </table>
