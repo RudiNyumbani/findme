@@ -72,7 +72,7 @@ export default function UnclaimedPersonsTable() {
         <tbody>
           {/**  Iterates over the `unclaimedPersons` array and renders a table row for each person.
             * Each `person` object is expected to have non-nullable properties corresponding 
-            * to the missing persons data fetched from Supabase. It maps over the unclaimedPersons` array 
+            * to the unclaimed persons data fetched from Supabase. It maps over the unclaimedPersons` array 
             * and extracts relevant details for each person.
             * The provided inline type definition ensures proper type checking for each `person` object.
             * This helps prevent TypeScript errors by explicitly defining the expected properties.
