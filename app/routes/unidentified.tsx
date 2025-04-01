@@ -58,9 +58,9 @@ export default function UnidentifiedPersonsTable() {
         <thead>
           <tr>
             <th>Tracking Number</th>
+            <th>Date Found</th>
             <th>Description</th>
             <th>Found Location</th>
-            <th>Date Found</th>
             <th>Gender</th>
             <th>Current Status</th>
           </tr>
@@ -89,9 +89,9 @@ export default function UnidentifiedPersonsTable() {
             return (
             <tr key={person.tracking_number}>
               <td>{person.tracking_number}</td>
+              <td>{formattedDate}</td>
               <td>{person.description}</td>
               <td>{person.found_location}</td>
-              <td>{formattedDate}</td>
               <td>{person.gender}</td>
               <td>{person.current_status}</td>
             </tr>
