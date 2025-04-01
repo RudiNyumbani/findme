@@ -28,11 +28,21 @@ export const loader: LoaderFunction = async () => {
   return data;
 };
 
+/**
+ * Renders a table displaying unidentified persons data.
+ *
+ * This component fetches data from a Supabase database using the `useLoaderData` hook.
+ * It initializes a DataTable for enhanced table functionalities like sorting 
+ * and filtering. The table is made responsive for small screens.
+ *
+ * @returns {JSX.Element} A responsive table of unidentified persons data.
+ */
 export default function UnidentifiedPersonsTable() {
+  const unidentifiedPersons = useLoaderData<typeof loader>();
   useEffect(() => {
     // Initialize DataTable once the component mounts
     const table = new DataTable("#unidentifiedPersonsTable", {
-      paging: true,
+      paging: false,
       autoWidth: false,
     });
     return () => {
@@ -47,22 +57,47 @@ export default function UnidentifiedPersonsTable() {
       <table id="unidentifiedPersonsTable" className="table table-striped table-bordered">
         <thead>
           <tr>
-            <th>Case #</th>
-            <th>Legal Last Name</th>
-            <th>Legal First Name</th>
-            <th>Missing Age</th>
+            <th>Tracking Number</th>
+            <th>Description</th>
+            <th>Found Location</th>
+            <th>Date Found</th>
             <th>Gender</th>
-            <th>Town</th>
-            <th>Date of Last Contact</th>
-            <th>Date Modified</th>
+            <th>Current Status</th>
           </tr>
         </thead>
-        <tbody>
-          {/* Sample Row */}
-          
-          
 
-          
+        <tbody>
+           {/**  Iterates over the `unidentifiedPersons` array and renders a table row for each person.
+            * Each `person` object is expected to have non-nullable properties corresponding 
+            * to the unidentified persons data fetched from Supabase. It maps over the unidentifiedPersons` array 
+            * and extracts relevant details for each person.
+            * The provided inline type definition ensures proper type checking for each `person` object.
+            * This helps prevent TypeScript errors by explicitly defining the expected properties.
+        */}
+          {unidentifiedPersons.map((person : {
+            tracking_number: string;
+            description: string;
+            found_location: string;
+            date_found: string;
+            gender: string;
+            current_status: string;
+          }) => {
+            // Format date to DD/MM/YYYY
+            const formattedDate = person.date_found
+            ? new Date(person.date_found).toLocaleDateString("en-GB").replace(/\//g, "/")
+            : "N/A"
+            return (
+            <tr key={person.tracking_number}>
+              <td>{person.tracking_number}</td>
+              <td>{person.description}</td>
+              <td>{person.found_location}</td>
+              <td>{formattedDate}</td>
+              <td>{person.gender}</td>
+              <td>{person.current_status}</td>
+            </tr>
+            );
+          })}
+           
         </tbody>
       </table>
       </div>
