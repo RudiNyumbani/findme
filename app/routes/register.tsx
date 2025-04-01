@@ -1,4 +1,5 @@
 import { useActionData, Form, Link, useNavigation } from "@remix-run/react";
+import Navbar from "~/components/navbar"; // Import Navbar
 import { ActionFunctionArgs, redirect, json } from "@remix-run/node";
 import { supabase } from "~/utils/supabaseClient"; // Server-side Supabase client
 
@@ -67,6 +68,8 @@ export default function Register() {
   const isSubmitting = navigation.state === "submitting";
 
   return (
+    <>
+    <Navbar />
     <div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: "#212529" }}>
       <div className="card p-4" style={{ minWidth: '400px', maxWidth: '400px', backgroundColor: '#343a40', color: 'white' }}>
         <h3 className="text-center mb-4">Register</h3>
@@ -98,5 +101,6 @@ export default function Register() {
         </Form>
       </div>
     </div>
+    </>
   );
 }

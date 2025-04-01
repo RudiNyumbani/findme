@@ -1,8 +1,11 @@
 import { Link } from '@remix-run/react';
+import Navbar from "~/components/navbar"; // Import Navbar
 // import React from 'react';  // Uncomment if using hooks
 
 const ForgotPassword = () => {
   return (
+    <>
+    <Navbar />
     <div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: "#212529" }}>
       <div className="card p-4" style={{ minWidth: '300px', maxWidth: '400px', backgroundColor: '#343a40', color: 'white' }}>
         <h3 className="text-center mb-4">Forgot Password</h3>
@@ -18,6 +21,7 @@ const ForgotPassword = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

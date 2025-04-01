@@ -9,7 +9,6 @@ import { useEffect } from "react";
 import type { LinksFunction } from "@remix-run/node";
 
 import Footer from "~/components/footer"; // Import Footer
-import Navbar from "~/components/navbar"; // Import Navbar
 
 
 // Import Bootstrap CSS
@@ -40,8 +39,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links /> {/* Remix will inject styles from `links()` here */}
       </head>
       <body className="bg-dark text-white d-flex flex-column min-vh-100">
-        
-        <Navbar />
 
         {/* Page Content */}
         <main className="flex-grow-1">

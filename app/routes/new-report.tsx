@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Navbar from "~/components/navbar"; // Import Navbar
 import { supabase } from "~/utils/supabaseClient"; // Get the supabaseclient
 import { json } from "@remix-run/react";
 import { useFetcher } from "@remix-run/react";
@@ -62,6 +63,8 @@ export default function NewReportForm() {
   const today = new Date().toISOString().split("T")[0];
 
   return (
+    <>
+    <Navbar />
     <div className="container pt-5 mt-5">
       <h2 className="mb-4">New Missing Person Report</h2>
       <fetcher.Form method="post">
@@ -175,5 +178,6 @@ export default function NewReportForm() {
         {fetcher.data?.error && <p className="text-danger mt-3">Error: {fetcher.data.error}</p>}
       </fetcher.Form>
     </div>
+    </>
   );
 }

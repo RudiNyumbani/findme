@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react";
 import { useState } from "react";
+import DashNavbar from "~/components/dash-navbar"; // Import Navbar
 
 // Mock Data (Replace with API Calls Later)
 const user = { name: "John Doe", lastLogin: "2025-03-20 14:32" };
@@ -12,6 +13,8 @@ export default function Dashboard() {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
+    <>
+    <DashNavbar />
     <div  className={`container py-5 mt-5 ${darkMode ? "bg-dark text-light" : ""}`}>
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -97,5 +100,6 @@ export default function Dashboard() {
         )}
       </div>
     </div>
+    </>
   );
 }
