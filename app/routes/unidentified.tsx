@@ -1,13 +1,31 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { MetaFunction, LoaderFunction } from "@remix-run/node";
 import { useEffect } from "react";
 import "datatables.net-bs5"; // Import Bootstrap 5 DataTables
 import DataTable from "datatables.net";
+import { useLoaderData } from "@remix-run/react";
+import { supabase } from "~/utils/supabaseClient";
 
 export const meta: MetaFunction = () => {
   return [
     { title: "Unidentified Persons" },
     { name: "description", content: "Welcome to FindMe!" },
   ];
+};
+
+
+// Fetch unidentified persons data from supabase
+export const loader: LoaderFunction = async () => {
+  const { data, error } = await supabase
+    .from("unidentified_persons")
+    .select("tracking_number, description, found_location, date_found, gender, current_status, found_location");
+
+  if (error) {
+    // This is for debugging remove in prod and handle errors properly
+    console.error("Error fecthing unidentified persons:", error.message);
+    return [];
+  }
+
+  return data;
 };
 
 export default function UnidentifiedPersonsTable() {
