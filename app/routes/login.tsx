@@ -1,8 +1,11 @@
 import { Link } from '@remix-run/react';
+import Navbar from "~/components/navbar"; // Import Navbar
 // import React from 'react';  // If you plan to use hooks like useState, useEffect, etc., then you’ll need to import React.
 
 const Login = () => {
   return (
+    <>
+    <Navbar/>
     <div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: "#212529" }}>
       <div className="card p-4" style={{ minWidth: '300px', maxWidth: '400px', backgroundColor: '#343a40', color: 'white' }}>
         <h3 className="text-center mb-4">Login</h3>
@@ -23,6 +26,7 @@ const Login = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 

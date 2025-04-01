@@ -1,5 +1,6 @@
 import type { MetaFunction, LoaderFunction } from "@remix-run/node";
 import { useEffect } from "react";
+import Navbar from "~/components/navbar"; // Import Navbar
 import "datatables.net-bs5"; // Import Bootstrap 5 DataTables
 import DataTable from "datatables.net";
 import { useLoaderData } from "@remix-run/react";
@@ -51,6 +52,8 @@ export default function UnidentifiedPersonsTable() {
   }, []);
 
   return (
+    <>
+    <Navbar />
     <div className="container mt-5">
       <div className="table-responsive"> {/* Ensures the table is scrollable on small screens */}
       <h2 className="mt-5">Unidentifed Persons</h2>
@@ -102,6 +105,7 @@ export default function UnidentifiedPersonsTable() {
       </table>
       </div>
     </div>
+    </>
   );
 }
 
