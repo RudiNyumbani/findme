@@ -7,7 +7,7 @@ export default function DashNavbar() {
     <nav className="navbar navbar-expand-lg p-2 mb-2 bg-white fixed-top">
       <div className="container-fluid">
         {/* Brand */}
-        <Link className="navbar-brand" to="/">FindMe</Link>
+        <Link className="navbar-brand" to="/dashboard">FindMe</Link>
 
         {/* Offcanvas Toggle Button */}
         <button
@@ -42,17 +42,17 @@ export default function DashNavbar() {
           <div className="offcanvas-body">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item fw-bold">
-                <Link prefetch="intent" className={`nav-link ${location.pathname === "/" ? "active" : ""}`} to="/">
+                <Link prefetch="intent" className={`nav-link ${location.pathname === "/dashboard/missing" ? "active" : ""}`} to="/dashboard/missing">
                   Missing Persons
                 </Link>
               </li>
               <li className="nav-item fw-bold">
-                <Link prefetch="intent" className={`nav-link ${location.pathname === "/unidentified" ? "active" : ""}`} to="/unidentified">
+                <Link prefetch="intent" className={`nav-link ${location.pathname === "/dashboard/unidentified" ? "active" : ""}`} to="/dashboard/unidentified">
                   Unidentified Persons
                 </Link>
               </li>
               <li className="nav-item fw-bold">
-                <Link prefetch="intent" className={`nav-link ${location.pathname === "/unclaimed" ? "active" : ""}`} to="/unclaimed">
+                <Link prefetch="intent" className={`nav-link ${location.pathname === "/dashboard/unclaimed" ? "active" : ""}`} to="/dashboard/unclaimed">
                   Unclaimed Persons
                 </Link>
               </li>
