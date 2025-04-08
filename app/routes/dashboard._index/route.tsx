@@ -1,16 +1,38 @@
-import { Link } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
-import DashNavbar from "~/components/dash-navbar"; // Import Navbar
+import { json, redirect } from "@remix-run/node";
+import DashNavbar from "~/components/dash-navbar"; // Import the DashNavbar
+import { supabase } from "~/utils/supabaseClient"; // import your supabase client
 
 // Mock Data (Replace with API Calls Later)
-const user = { name: "John Doe", lastLogin: "2025-03-20 14:32" };
+//const user = { name: "John Doe", lastLogin: "2025-03-20 14:32" };
 const userReports = [
   { caseNumber: "MSP-2025-00A5", status: "Active", date: "2025-03-12" },
   { caseNumber: "UNC-2025-00C7", status: "Closed", date: "2025-02-28" },
 ];
 
+
+// Loader function to check if the user is authenticated
+export async function loader({ request }: { request: Request }) {
+  const { data: { session }, error } = await supabase.auth.getSession(); // Get the session from supabase
+  
+  // Check if user is authenticated
+  if (!session) {
+    // If not authenticated, redirect to login page
+    console.log("User not authenticated, redirecting...");
+    return redirect('/login');
+  }
+
+  // Return user data (or anything else you want to pass to the component)
+  console.log("User authenticated, redirecting to dashboard");
+  return json({ user: session.user });
+}
+
+
+
 export default function Dashboard() {
   const [darkMode, setDarkMode] = useState(false);
+  const { user } = useLoaderData();
 
   return (
     <>
@@ -18,9 +40,9 @@ export default function Dashboard() {
     <div  className={`container py-5 mt-5 ${darkMode ? "bg-dark text-light" : ""}`}>
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold">👋 Welcome, {user.name}!</h2>
+        <h2 className="fw-bold">👋 Welcome, {user?.email || "User"}!</h2>
         <div>
-          <span className="me-3 ">Last login: {user.lastLogin}</span>
+          <span className="me-3 ">Last login: {user?.aud}</span>
           <button
             onClick={() => setDarkMode(!darkMode)}
             className="btn btn-outline-secondary"
