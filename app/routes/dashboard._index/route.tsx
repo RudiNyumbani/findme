@@ -41,15 +41,6 @@ export default function Dashboard() {
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold">👋 Welcome, {user?.email || "User"}!</h2>
-        <div>
-          <span className="me-3 ">Last login: {user?.aud}</span>
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="btn btn-outline-secondary"
-          >
-            {darkMode ? "🌞 Light Mode" : "🌙 Dark Mode"}
-          </button>
-        </div>
       </div>
 
       {/* Search Bar */}
