@@ -1,8 +1,7 @@
 import { useState } from "react";
 import Navbar from "~/components/navbar"; // Import Navbar
 import { supabase } from "~/utils/supabaseClient"; // Get the supabaseclient
-import { json } from "@remix-run/react";
-import { useFetcher } from "@remix-run/react";
+import { json, useFetcher  } from "@remix-run/react";
 
 
 
