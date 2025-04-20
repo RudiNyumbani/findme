@@ -83,7 +83,7 @@ export default function Dashboard() {
       {/* Quick Actions */}
       <h4 className="mt-5 fw-bold">📌 Quick Actions</h4>
       <div className="d-flex gap-3 flex-wrap mb-4">
-        <Link to="/report" className="btn btn-lg btn-primary w-100">
+        <Link to="/dashboard/new-report" className="btn btn-lg btn-primary w-100">
           📋 Report Missing Person
         </Link>
         <Link to="/track" className="btn btn-lg btn-secondary w-100">
