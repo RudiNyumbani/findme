@@ -1,5 +1,4 @@
 import { Link, useLoaderData } from "@remix-run/react";
-import { useState } from "react";
 import { json, redirect } from "@remix-run/node";
 import DashNavbar from "~/components/dash-navbar"; // Import the DashNavbar
 import { supabase } from "~/utils/supabaseClient"; // import your supabase client
