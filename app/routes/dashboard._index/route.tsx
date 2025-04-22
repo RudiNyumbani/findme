@@ -4,13 +4,6 @@ import { json, redirect } from "@remix-run/node";
 import DashNavbar from "~/components/dash-navbar"; // Import the DashNavbar
 import { supabase } from "~/utils/supabaseClient"; // import your supabase client
 
-// Mock Data (Replace with API Calls Later)
-//const user = { name: "John Doe", lastLogin: "2025-03-20 14:32" };
-const userReports = [
-  { caseNumber: "MSP-2025-00A5", status: "Active", date: "2025-03-12" },
-  { caseNumber: "UNC-2025-00C7", status: "Closed", date: "2025-02-28" },
-];
-
 
 // Loader function to check if the user is authenticated
 export async function loader({ request }: { request: Request }) {
