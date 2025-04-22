@@ -9,6 +9,10 @@ export async function action({ request }) {
   const formData = await request.formData();
   const dataObject = Object.fromEntries(formData.entries());
 
+  const { 
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const supabaseData = {
     legal_first_name: dataObject.firstname,
     legal_last_name: dataObject.lastname,
@@ -17,14 +21,13 @@ export async function action({ request }) {
     gender: dataObject.gender,
     town_location: dataObject.location,
     date_of_last_contact: dataObject.dlc,
-    reporter_name: dataObject.repname || null,
-    reporter_contact: dataObject.repcontact || null,
     physical_description: dataObject.pydesc || null,
     last_seen_wearing: dataObject.lstwear || null,
     medical_conditions: dataObject.medcon || null,
     emergency_contacts: dataObject.emcont || null,
     possible_locations: dataObject.posloc || null,
     circumstances: dataObject.circ || null,
+    reporter_id: user.id || null,
   };
 
   const { error } = await supabase.from("missing_persons").insert([supabaseData]);
@@ -120,16 +123,6 @@ export default function NewReportForm() {
             max={today}
             required
           />
-        </div>
-
-        {/* Reporter Info */}
-        <div className="mb-3">
-          <label htmlFor="repname" className="form-label">Reporter’s Name (Optional)</label>
-          <input type="text" name="repname" id="repname" className="form-control" />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="repcontact" className="form-label">Reporter’s Contact (Optional)</label>
-          <input type="text" name="repcontact" id="repcontact" className="form-control" />
         </div>
 
         {/* Advanced Info - Button */}
