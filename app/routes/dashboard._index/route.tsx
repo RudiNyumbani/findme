@@ -5,8 +5,8 @@ import { supabase } from "~/utils/supabaseClient"; // import your supabase clien
 
 
 // Loader function to check if the user is authenticated
-export async function loader({ request }: { request: Request }) {
-  const { data: { session }, error } = await supabase.auth.getSession(); // Get the session from supabase
+export async function loader() {
+  const { data: { session } } = await supabase.auth.getSession(); // Get the session from supabase
   
   // Check if user is authenticated
   if (!session) {
@@ -14,6 +14,7 @@ export async function loader({ request }: { request: Request }) {
     console.log("User not authenticated, redirecting...");
     return redirect('/login');
   }
+
 
   const user = session.user;
   // Fetch reports or any other data you need for the dashboard
@@ -26,8 +27,10 @@ export async function loader({ request }: { request: Request }) {
     console.error("Error fetching user reports:", reportsError.message);
   }
 
+
   const activeReportsCount = reports?.filter(r => r.status === "active").length || 0;
   const closedReportsCount = reports?.filter(r=> r.status === "closed").length || 0;
+
 
   // Get username from the profile table
   const { data: profile, error: profileError } = await supabase
@@ -39,6 +42,7 @@ export async function loader({ request }: { request: Request }) {
   if (profileError) {
     console.error("Error fetching user profile:", profileError.message);
   }
+
 
   // Return user data (or anything else you want to pass to the component)
   console.log("User authenticated, redirecting to dashboard");
@@ -55,7 +59,7 @@ export async function loader({ request }: { request: Request }) {
 
 export default function Dashboard() {
   
-  const { user, userReports, activeReportsCount, closedReportsCount, username } = useLoaderData<typeof loader>(); // Get the user and reports from the loader data
+  const { userReports, activeReportsCount, closedReportsCount, username } = useLoaderData<typeof loader>(); // Get the user and reports from the loader data
 
   return (
     <>
@@ -108,7 +112,7 @@ export default function Dashboard() {
       {/* Quick Actions */}
       <h4 className="mt-5 fw-bold">📌 Quick Actions</h4>
       <div className="d-flex gap-3 flex-wrap mb-4">
-        <Link to="/dashboard/new-report" className="btn btn-lg btn-primary w-100">
+        <Link prefetch="intent" to="/dashboard/new-report" className="btn btn-lg btn-primary w-100">
           📋 Report Missing Person
         </Link>
         {/*
@@ -127,7 +131,7 @@ export default function Dashboard() {
         {userReports.length > 0 ? (
           userReports.map((report) => (
             <Link
-              key={report.caseNumber}
+              key={report.case_number}
               to={`/cases/${report.case_number}`}
               className="list-group-item list-group-item-action d-flex justify-content-between"
             >
