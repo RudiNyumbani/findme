@@ -23,27 +23,59 @@ export async function loader({ request }: { request: Request }) {
     return redirect('/login');
   }
 
+  const user = session.user;
+  // Fetch reports or any other data you need for the dashboard
+  const { data: reports, error: reportsError } = await supabase
+    .from("missing_persons")
+    .select("case_number, status, date_of_last_contact")
+    .eq("reporter_id", user.id); // Fetch reports for the authenticated user
+
+  if (reportsError) {
+    console.error("Error fetching user reports:", reportsError.message);
+  }
+
+  const activeReportsCount = reports?.filter(r => r.status === "active").length || 0;
+  const closedReportsCount = reports?.filter(r=> r.status === "closed").length || 0;
+
+  // Get username from the profile table
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("username")
+    .eq("id", user.id)
+    .single();
+
+  if (profileError) {
+    console.error("Error fetching user profile:", profileError.message);
+  }
+
   // Return user data (or anything else you want to pass to the component)
   console.log("User authenticated, redirecting to dashboard");
-  return json({ user: session.user });
+  return json({ 
+    user,
+    userReports: reports || [], // Pass the fetched reports to the component
+    activeReportsCount,
+    closedReportsCount,
+    username: profile?.username ?? user.email, // Pass the username to the component, fallback if no username
+  });
 }
 
 
 
 export default function Dashboard() {
-  const [darkMode, setDarkMode] = useState(false);
-  const { user } = useLoaderData();
+  
+  const { user, userReports, activeReportsCount, closedReportsCount, username } = useLoaderData<typeof loader>(); // Get the user and reports from the loader data
 
   return (
     <>
     <DashNavbar />
-    <div  className={`container py-5 mt-5 ${darkMode ? "bg-dark text-light" : ""}`}>
+    <div  className={`container py-5 mt-5 "bg-dark text-light" : ""}`}>
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold">👋 Welcome, {user?.email || "User"}!</h2>
+        <h2 className="fw-bold">👋 Welcome, {username}!</h2>
       </div>
 
       {/* Search Bar */}
+      {/*
       <div className="mb-4">
         <input
           type="text"
@@ -51,6 +83,7 @@ export default function Dashboard() {
           placeholder="🔍 Search Case Number or Name..."
         />
       </div>
+      */}
 
       {/* Stats Section */}
       <div className="row g-3">
@@ -66,7 +99,7 @@ export default function Dashboard() {
           <div className="card bg-success text-white">
             <div className="card-body">
               <h5 className="card-title">✔️ Cases Resolved</h5>
-              <p className="display-6 fw-bold">4</p>
+              <p className="display-6 fw-bold">{closedReportsCount}</p>
             </div>
           </div>
         </div>
@@ -74,7 +107,7 @@ export default function Dashboard() {
           <div className="card bg-warning text-dark">
             <div className="card-body">
               <h5 className="card-title">📢 Active Reports</h5>
-              <p className="display-6 fw-bold">8</p>
+              <p className="display-6 fw-bold">{activeReportsCount}</p>
             </div>
           </div>
         </div>
@@ -86,12 +119,14 @@ export default function Dashboard() {
         <Link to="/dashboard/new-report" className="btn btn-lg btn-primary w-100">
           📋 Report Missing Person
         </Link>
+        {/*
         <Link to="/track" className="btn btn-lg btn-secondary w-100">
           🔎 Search & Track
         </Link>
         <Link to="/profile" className="btn btn-lg btn-light w-100">
           👤 View Profile
         </Link>
+        */}
       </div>
 
       {/* User Reports Section */}
@@ -101,11 +136,11 @@ export default function Dashboard() {
           userReports.map((report) => (
             <Link
               key={report.caseNumber}
-              to={`/cases/${report.caseNumber}`}
+              to={`/cases/${report.case_number}`}
               className="list-group-item list-group-item-action d-flex justify-content-between"
             >
-              <span>{report.caseNumber} - {report.status}</span>
-              <span className="badge bg-secondary">{report.date}</span>
+              <span className="fw-bold">{report.case_number} - Status: {report.status}</span>
+              <span className="badge bg-secondary">{report.date_of_last_contact}</span>
             </Link>
           ))
         ) : (
