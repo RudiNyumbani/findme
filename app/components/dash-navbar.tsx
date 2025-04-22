@@ -7,7 +7,7 @@ export default function DashNavbar() {
     <nav className="navbar navbar-expand-lg p-2 mb-2 bg-white fixed-top">
       <div className="container-fluid">
         {/* Brand */}
-        <Link className="navbar-brand" to="/dashboard">FindMe</Link>
+        <Link prefetch="intent" className="navbar-brand" to="/dashboard">FindMe</Link>
 
         {/* Offcanvas Toggle Button */}
         <button
@@ -57,9 +57,6 @@ export default function DashNavbar() {
                 </Link>
               </li>
             </ul>
-
-            {/* New Report Button */}
-            <Link prefetch="intent" className="btn btn-primary me-3" to="/new-report">Report Missing Person</Link>
 
             {/* Language Dropdown, Register & Login */}
             <ul className="navbar-nav">
