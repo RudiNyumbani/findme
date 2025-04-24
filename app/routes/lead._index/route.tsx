@@ -3,7 +3,7 @@ import AgentNavbar from "~/components/lead-navbar"; // You can create this compo
 import { supabase } from "~/utils/supabaseClient";
 import { redirect, json } from "@remix-run/node";
 
-export async function loader({ request }: { request: Request }) {
+export async function loader() {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) {
     return redirect("/login");
@@ -12,7 +12,7 @@ export async function loader({ request }: { request: Request }) {
   const user = session.user;
   const { data: reports, error: reportsError } = await supabase
   .from("missing_persons")
-  .select("case_number, status, date_of_last_contact")
+  .select("case_number, status, date_of_last_contact, legal_first_name, legal_last_name")
   .eq("officer_id", user.id); // Fetch reports for the authenticated user
   if (reportsError) {
     console.error("Error fetching user reports:", reportsError.message);
@@ -41,22 +41,6 @@ export async function loader({ request }: { request: Request }) {
 
 export default function AgentDashboard() {
   const { name, userReports, activeReportsCount, closedReportsCount } = useLoaderData<typeof loader>();
-
-  // Placeholder mock cases
-  const handledCases = [
-    {
-      caseNumber: "MSP-2025-00D4",
-      name: "Jane Doe",
-      status: "active",
-      dateReported: "2025-04-10",
-    },
-    {
-      caseNumber: "UNP-2025-00A1",
-      name: "Unknown Male",
-      status: "under investigation",
-      dateReported: "2025-03-25",
-    },
-  ];
 
   return (
     <>
@@ -107,24 +91,24 @@ export default function AgentDashboard() {
                 <th>Case Number</th>
                 <th>Name</th>
                 <th>Status</th>
-                <th>Date Reported</th>
+                <th>Date of Last Contact</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {handledCases.map((caseData) => (
-                <tr key={caseData.caseNumber}>
-                  <td>{caseData.caseNumber}</td>
-                  <td>{caseData.name}</td>
+              {userReports.map((caseData) => (
+                <tr key={caseData.case_number}>
+                  <td>{caseData.case_number}</td>
+                  <td>{caseData.legal_first_name + " " + caseData.legal_last_name}</td>
                   <td>
                     <span className={`badge bg-${getStatusColor(caseData.status)}`}>
                       {caseData.status}
                     </span>
                   </td>
-                  <td>{caseData.dateReported}</td>
+                  <td>{caseData.date_of_last_contact}</td>
                   <td>
                     <Link
-                      to={`/cases/${caseData.caseNumber}`}
+                      to={`/cases/${caseData.case_number}`}
                       className="btn btn-sm btn-outline-primary me-2"
                     >
                       View
