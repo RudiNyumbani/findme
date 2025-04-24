@@ -1,5 +1,7 @@
-import { Link } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import AgentNavbar from "~/components/lead-navbar";
+import { supabase } from "~/utils/supabaseClient";
+import { redirect, json } from "@remix-run/node";
 
 type Case = {
   caseNumber: string;
@@ -33,7 +35,33 @@ const allCases: Case[] = [
   },
 ];
 
+export async function loader({ request }: { request: Request }) {
+  const { data: {session} } = await supabase.auth.getSession();
+  if (!session) {
+    return redirect("/lead");
+  }
+
+  const { data: profile, error } = await supabase
+    .from("profiles")
+    .select("role, username")
+    .eq("id", session.user.id)
+    .single();
+
+  if (error || profile?.role !== "agent") {
+    return redirect("/lead/unauthorized");
+  }
+
+  return json({
+    user: session.user,
+    role: profile.role,
+    name: profile.username || "agent",
+  });
+}
+
+
+
 export default function AllCasesPage() {
+  const { name } = useLoaderData<typeof loader>();
   return (
     <>
       <AgentNavbar />
