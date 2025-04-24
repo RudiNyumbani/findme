@@ -1,12 +1,31 @@
 import { Link, useLoaderData, useFetcher } from "@remix-run/react";
-import AgentNavbar from "~/components/lead-navbar"; // You can create this component similar to DashNavbar
+import AgentNavbar from "~/components/lead-navbar";
 import { supabase } from "~/utils/supabaseClient";
 import { redirect, json , ActionFunction} from "@remix-run/node";
 import { useState, useEffect } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button, Form, Toast, ToastContainer} from "react-bootstrap";
 
 
 
+/**
+ * Handles the loader for the lead dashboard route.
+ *
+ * Fetches the authenticated user from Supabase Auth, then fetches the
+ * user's reports from the `missing_persons` table. It also fetches the
+ * user's profile from the `profiles` table to determine if they have
+ * the "agent" role.
+ *
+ * Returns a JSON response with the following data:
+ * - user: The authenticated user
+ * - role: The authenticated user's role
+ * - name: The authenticated user's username, or "agent" if no username
+ * - activeReportsCount: The number of active reports for the user
+ * - closedReportsCount: The number of closed reports for the user
+ * - userReports: The list of reports for the user
+ *
+ * If there is no session for the user, it redirects to /login.
+ * If the user does not have the "agent" role, it redirects to /lead/unauthorized.
+ */
 export async function loader() {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) {
@@ -80,9 +99,21 @@ export const action: ActionFunction = async ({ request }) => {
 
 
 
+/**
+ * AgentDashboard component renders the main dashboard interface for agents.
+ * It displays summary statistics of cases handled by the agent, including
+ * the number of handled, active, and closed cases. The component also provides
+ * a table of assigned cases with options to view details or update the case status.
+ * 
+ * The component manages state for the selected case for status updates and
+ * displays a toast notification upon successful status updates. It also uses
+ * the `useFetcher` hook to handle form submissions for updating case statuses.
+ * 
+ * @returns JSX.Element - The rendered agent dashboard interface
+ */
+
 export default function AgentDashboard() {
   const { name, userReports, activeReportsCount, closedReportsCount } = useLoaderData<typeof loader>();
-
   const [selectedCase, setSelectedCase] = useState<null | {
     case_number: string;
     status: string;
@@ -90,9 +121,12 @@ export default function AgentDashboard() {
   
   const fetcher = useFetcher();
 
+  const [showToast, setShowToast] = useState(false);
+  // Handle modal close and toast display
   useEffect(() => {
     if (fetcher.state === "idle" && fetcher.data && !fetcher.data.error) {
       setSelectedCase(null);
+      setShowToast(true);
     }
   }, [fetcher.state, fetcher.data]);
   
@@ -232,7 +266,27 @@ export default function AgentDashboard() {
           </fetcher.Form>
         </Modal>
               
-              
+        <ToastContainer
+          position="top-center"
+          className="p-3"
+          style={{ zIndex: 9999 }}
+        >
+          <Toast
+            show={showToast}
+            onClose={() => setShowToast(false)}
+            delay={3000}
+            autohide
+            bg="success"
+          >
+            <Toast.Header closeButton>
+              <strong className="me-auto">Status Updated</strong>
+            </Toast.Header>
+            <Toast.Body className="text-white">
+              ✅ Case status was updated successfully!
+            </Toast.Body>
+          </Toast>
+        </ToastContainer>
+
       </div>
     </>
   );
