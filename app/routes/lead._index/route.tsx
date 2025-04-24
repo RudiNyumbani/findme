@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link, useLoaderData } from "@remix-run/react";
 import AgentNavbar from "~/components/lead-navbar"; // You can create this component similar to DashNavbar
 import { supabase } from "~/utils/supabaseClient";
@@ -9,6 +8,17 @@ export async function loader({ request }: { request: Request }) {
   if (!session) {
     return redirect("/login");
   }
+
+  const user = session.user;
+  const { data: reports, error: reportsError } = await supabase
+  .from("missing_persons")
+  .select("case_number, status, date_of_last_contact")
+  .eq("officer_id", user.id); // Fetch reports for the authenticated user
+  if (reportsError) {
+    console.error("Error fetching user reports:", reportsError.message);
+  }
+  const activeReportsCount = reports?.filter(r => r.status === "active").length || 0;
+  const closedReportsCount = reports?.filter(r=> r.status === "closed").length || 0;
 
   const { data: profile, error } = await supabase
     .from("profiles")
@@ -22,12 +32,15 @@ export async function loader({ request }: { request: Request }) {
     user: session.user,
     role: profile.role,
     name: profile.username || "agent",
+    activeReportsCount,
+    closedReportsCount,
+    userReports: reports || [], // Pass the fetched reports to the component
   });
 }
 
 
 export default function AgentDashboard() {
-  const { name } = useLoaderData<typeof loader>();
+  const { name, userReports, activeReportsCount, closedReportsCount } = useLoaderData<typeof loader>();
 
   // Placeholder mock cases
   const handledCases = [
@@ -51,7 +64,7 @@ export default function AgentDashboard() {
       <div className={`container py-5 mt-5 "bg-dark text-light" : ""}`}>
         {/* Header */}
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 className="fw-bold">🚓 Welcome, Officer</h2>
+          <h2 className="fw-bold">Welcome, Agent {name}</h2>
          
         </div>
 
@@ -61,7 +74,7 @@ export default function AgentDashboard() {
             <div className="card bg-primary text-white">
               <div className="card-body">
                 <h5 className="card-title">📂 Handled Cases</h5>
-                <p className="display-6 fw-bold">{handledCases.length}</p>
+                <p className="display-6 fw-bold">{userReports.length}</p>
               </div>
             </div>
           </div>
@@ -69,8 +82,7 @@ export default function AgentDashboard() {
             <div className="card bg-warning text-dark">
               <div className="card-body">
                 <h5 className="card-title">🕵️‍♂️ Under Investigation</h5>
-                <p className="display-6 fw-bold">
-                  {handledCases.filter((c) => c.status === "under investigation").length}
+                <p className="display-6 fw-bold">{activeReportsCount}
                 </p>
               </div>
             </div>
@@ -79,8 +91,7 @@ export default function AgentDashboard() {
             <div className="card bg-success text-white">
               <div className="card-body">
                 <h5 className="card-title">✅ Closed Cases</h5>
-                <p className="display-6 fw-bold">
-                  {handledCases.filter((c) => c.status === "closed").length}
+                <p className="display-6 fw-bold">{closedReportsCount}
                 </p>
               </div>
             </div>
