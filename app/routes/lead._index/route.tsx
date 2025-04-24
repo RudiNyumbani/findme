@@ -74,7 +74,8 @@ export const action: ActionFunction = async ({ request }) => {
     return json({ error: error.message }, { status: 500 });
   }
 
-  return redirect("/lead"); // Reload the agent dashboard
+  
+  return json({ success: true }, { status: 200 });
 };
 
 
