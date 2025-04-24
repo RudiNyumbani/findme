@@ -31,15 +31,17 @@ export default function AgentNavbar() {
                 📚 All Cases
               </Link>
             </li>
+            {/*
             <li className="nav-item">
               <Link className="nav-link" to="/lead/profile">
                 👤 Profile
               </Link>
             </li>
+            */}
           </ul>
           <form method="post" action="/logout">
             <button className="btn btn-outline-light" type="submit">
-              🚪 Logout
+              Logout
             </button>
           </form>
         </div>
