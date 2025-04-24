@@ -1,7 +1,8 @@
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useFetcher } from "@remix-run/react";
 import AgentNavbar from "~/components/lead-navbar"; // You can create this component similar to DashNavbar
 import { supabase } from "~/utils/supabaseClient";
 import { redirect, json } from "@remix-run/node";
+import { useState } from "react";
 
 export async function loader({ request }: { request: Request }) {
   const { data: { session } } = await supabase.auth.getSession();
@@ -42,6 +43,13 @@ export async function loader({ request }: { request: Request }) {
 export default function AgentDashboard() {
   const { name, userReports, activeReportsCount, closedReportsCount } = useLoaderData<typeof loader>();
 
+  const [selectedCase, setSelectedCase] = useState<null | {
+    case_number: string;
+    status: string;
+  }>(null);
+  
+  const fetcher = useFetcher();
+  
   return (
     <>
       <AgentNavbar />
@@ -113,7 +121,11 @@ export default function AgentDashboard() {
                     >
                       View
                     </Link>
-                    <button className="btn btn-sm btn-outline-secondary">
+                    <button className="btn btn-sm btn-outline-secondary"
+                    onClick={() => setSelectedCase(caseData)}
+                    data-bs-toggle = "modal"
+                    data-bs-target = "#statusModal"
+                    >
                       Update Status
                     </button>
                   </td>
@@ -130,6 +142,70 @@ export default function AgentDashboard() {
           </Link>
           
         </div>
+
+        {/* Update Status Modal */}
+        <div
+          className="modal fade"
+          id="statusModal"
+          tabIndex={-1}
+          aria-labelledby="statusModalLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog">
+            <div className="modal-content text-dark">
+              <div className="modal-header">
+                <h5 className="modal-title" id="statusModalLabel">
+                  Update Case Status
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                />
+              </div>
+              <fetcher.Form method="post" action="/lead/update-status">
+                <div className="modal-body">
+                  <input type="hidden" name="case_number" value={selectedCase?.case_number || ""} />
+                  <div className="mb-3">
+                    <label htmlFor="status" className="form-label">
+                      New Status
+                    </label>
+                    <select
+                      className="form-select"
+                      name="status"
+                      id="status"
+                      value = {selectedCase?.status || ""}
+                      onChange = {(e) =>
+                        setSelectedCase((prev) => 
+                          prev ? { ...prev, status: e.target.value } : prev
+                        )
+                      }
+                      required
+                    >
+                      <option value="pending">Apending</option>
+                      <option value="active">Active</option>
+                      <option value="closed">Closed</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn btn-primary">
+                    Update
+                  </button>
+                </div>
+              </fetcher.Form>
+            </div>
+          </div>
+        </div>
+
       </div>
     </>
   );
