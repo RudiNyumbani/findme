@@ -38,7 +38,7 @@ const allCases: Case[] = [
 export async function loader({ request }: { request: Request }) {
   const { data: {session} } = await supabase.auth.getSession();
   if (!session) {
-    return redirect("/lead");
+    return redirect("/login");
   }
 
   const { data: profile, error } = await supabase
