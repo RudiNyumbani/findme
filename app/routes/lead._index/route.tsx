@@ -4,7 +4,7 @@ import { supabase } from "~/utils/supabaseClient";
 import { redirect, json } from "@remix-run/node";
 import { useState } from "react";
 
-export async function loader({ request }: { request: Request }) {
+export async function loader() {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) {
     return redirect("/login");
@@ -122,7 +122,7 @@ export default function AgentDashboard() {
                       View
                     </Link>
                     <button className="btn btn-sm btn-outline-secondary"
-                    onClick={() => setSelectedCase(caseData)}
+                    onClick={() => setSelectedCase({ case_number: caseData.case_number, status: caseData.status })}
                     data-bs-toggle = "modal"
                     data-bs-target = "#statusModal"
                     >
