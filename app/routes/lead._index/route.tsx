@@ -1,7 +1,7 @@
 import { Link, useLoaderData, useFetcher } from "@remix-run/react";
 import AgentNavbar from "~/components/lead-navbar"; // You can create this component similar to DashNavbar
 import { supabase } from "~/utils/supabaseClient";
-import { redirect, json } from "@remix-run/node";
+import { redirect, json , ActionFunction} from "@remix-run/node";
 import { useState } from "react";
 
 export async function loader() {
@@ -38,6 +38,41 @@ export async function loader() {
     userReports: reports || [], // Pass the fetched reports to the component
   });
 }
+
+  /**
+   * Handle form submission from the agent dashboard to update a case status.
+   * Expects the following form data:
+   * - case_number: string
+   * - status: string
+   * If the input is invalid, returns a 400 response with an error message.
+   * If there is an error updating the case status in Supabase,
+   * returns a 500 response with the error message.
+   * On success, redirects back to the agent dashboard.
+   */
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+  const caseNumber = formData.get("case_number") as string;
+  const newStatus = formData.get("status") as string;
+
+  // Ensure valid input
+  if (!caseNumber || !newStatus) {
+    return json({ error: "Missing data" }, { status: 400 });
+  }
+
+  // Update the case status in Supabase
+  const { error } = await supabase
+    .from("missing_persons")
+    .update({ status: newStatus })
+    .eq("case_number", caseNumber);
+
+  if (error) {
+    console.error("Error updating status:", error.message);
+    return json({ error: error.message }, { status: 500 });
+  }
+
+  return redirect("/lead"); // Reload the agent dashboard
+};
+
 
 
 export default function AgentDashboard() {
@@ -164,7 +199,7 @@ export default function AgentDashboard() {
                   aria-label="Close"
                 />
               </div>
-              <fetcher.Form method="post" action="/lead/update-status">
+              <fetcher.Form method="post">
                 <div className="modal-body">
                   <input type="hidden" name="case_number" value={selectedCase?.case_number || ""} />
                   <div className="mb-3">
@@ -183,7 +218,7 @@ export default function AgentDashboard() {
                       }
                       required
                     >
-                      <option value="pending">Apending</option>
+                      <option value="pending">Pending</option>
                       <option value="active">Active</option>
                       <option value="closed">Closed</option>
                     </select>
