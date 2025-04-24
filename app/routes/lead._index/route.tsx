@@ -2,7 +2,10 @@ import { Link, useLoaderData, useFetcher } from "@remix-run/react";
 import AgentNavbar from "~/components/lead-navbar"; // You can create this component similar to DashNavbar
 import { supabase } from "~/utils/supabaseClient";
 import { redirect, json , ActionFunction} from "@remix-run/node";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Modal, Button, Form } from "react-bootstrap";
+
+
 
 export async function loader() {
   const { data: { session } } = await supabase.auth.getSession();
@@ -85,6 +88,13 @@ export default function AgentDashboard() {
   }>(null);
   
   const fetcher = useFetcher();
+
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data && !fetcher.data.error) {
+      setSelectedCase(null);
+    }
+  }, [fetcher.state, fetcher.data]);
+  
   
   return (
     <>
@@ -180,68 +190,48 @@ export default function AgentDashboard() {
         </div>
 
         {/* Update Status Modal */}
-        <div
-          className="modal fade"
-          id="statusModal"
-          tabIndex={-1}
-          aria-labelledby="statusModalLabel"
-          aria-hidden="true"
+        <Modal
+        show={selectedCase !== null}
+        onHide={() => setSelectedCase(null)}
+        backdrop="static"
+        keyboard={false}
         >
-          <div className="modal-dialog">
-            <div className="modal-content text-dark">
-              <div className="modal-header">
-                <h5 className="modal-title" id="statusModalLabel">
-                  Update Case Status
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                />
-              </div>
-              <fetcher.Form method="post">
-                <div className="modal-body">
-                  <input type="hidden" name="case_number" value={selectedCase?.case_number || ""} />
-                  <div className="mb-3">
-                    <label htmlFor="status" className="form-label">
-                      New Status
-                    </label>
-                    <select
-                      className="form-select"
-                      name="status"
-                      id="status"
-                      value = {selectedCase?.status || ""}
-                      onChange = {(e) =>
-                        setSelectedCase((prev) => 
-                          prev ? { ...prev, status: e.target.value } : prev
-                        )
-                      }
-                      required
-                    >
-                      <option value="pending">Pending</option>
-                      <option value="active">Active</option>
-                      <option value="closed">Closed</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                  >
-                    Cancel
-                  </button>
-                  <button type="submit" className="btn btn-primary">
-                    Update
-                  </button>
-                </div>
-              </fetcher.Form>
-            </div>
-          </div>
-        </div>
-
+          <fetcher.Form method="post">
+            <Modal.Header closeButton>
+              <Modal.Title>Update Case Status</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <input type="hidden" name="case_number" value={selectedCase?.case_number || ""} />
+              <Form.Group className="mb-3" controlId="status">
+                <Form.Label>New Status</Form.Label>
+                <Form.Select
+                  name="status"
+                  value={selectedCase?.status || ""}
+                  onChange={(e) =>
+                    setSelectedCase((prev) =>
+                      prev ? { ...prev, status: e.target.value } : prev
+                    )
+                  }
+                  required
+                >
+                  <option value="pending">Pending</option>
+                  <option value="active">Active</option>
+                  <option value="closed">Closed</option>
+                </Form.Select>
+              </Form.Group>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setSelectedCase(null)}>
+                Cancel
+              </Button>
+              <Button variant="primary" type="submit">
+                Update
+              </Button>
+            </Modal.Footer>
+          </fetcher.Form>
+        </Modal>
+              
+              
       </div>
     </>
   );
