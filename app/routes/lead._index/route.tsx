@@ -3,7 +3,7 @@ import AgentNavbar from "~/components/lead-navbar"; // You can create this compo
 import { supabase } from "~/utils/supabaseClient";
 import { redirect, json } from "@remix-run/node";
 
-export async function loader() {
+export async function loader({ request }: { request: Request }) {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) {
     return redirect("/login");
