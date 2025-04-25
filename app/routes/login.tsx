@@ -10,16 +10,35 @@ export const action: ActionFunction = async ({ request }) => {
   const password = formData.get("password") as string;
 
   // If you're only using email for login:
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data: { session }, error: loginError } = await supabase.auth.signInWithPassword({
     email: emailOrUsername,
     password,
   });
 
-  if (error) {
-    return json({ error: error.message }, { status: 401 });
+  if (loginError || !session) {
+    return json({ error: loginError?.message }, { status: 401 });
   }
 
-  return redirect("/dashboard");
+  const userId = session.user.id;
+  // Fetch user profile to determine role
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", userId)
+    .single();
+
+  if ( profileError || !profile) {
+    return json({ error: "Unable to fetch user role" }, { status: 500 });
+  }
+
+  // Redirect based on user role
+  switch (profile.role) {
+    case "agent":
+      return redirect("/lead");
+    default:
+      return redirect("/dashboard");
+
+  }
 };
 
 export default function Login() {

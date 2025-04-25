@@ -17,10 +17,11 @@
     "@remix-run/serve": "^2.15.3",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.48.1",
-    "bootstrap": "^5.3.3",
+    "bootstrap": "^5.3.5",
     "datatables.net-bs5": "^2.2.2",
     "isbot": "^4.1.0",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.10.9",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
