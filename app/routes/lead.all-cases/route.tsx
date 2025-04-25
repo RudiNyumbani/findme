@@ -5,7 +5,6 @@ import { redirect, json } from "@remix-run/node";
 
 type Case = {
   caseNumber: string;
-  type: "Missing" | "Unidentified" | "Unclaimed";
   status: string;
   date: string;
   assignedTo?: string | null;
@@ -14,21 +13,18 @@ type Case = {
 const allCases: Case[] = [
   {
     caseNumber: "MSP-2025-00A7",
-    type: "Missing",
     status: "pending",
     date: "2025-04-19",
     assignedTo: null,
   },
   {
     caseNumber: "UNP-2025-00B3",
-    type: "Unidentified",
     status: "active",
     date: "2025-03-10",
     assignedTo: "Agent007",
   },
   {
     caseNumber: "UNC-2025-00C2",
-    type: "Unclaimed",
     status: "closed",
     date: "2025-02-15",
     assignedTo: null,
@@ -73,7 +69,6 @@ export default function AllCasesPage() {
             <thead className="table-dark">
               <tr>
                 <th>Case Number</th>
-                <th>Type</th>
                 <th>Status</th>
                 <th>Date Reported</th>
                 <th>Assigned To</th>
@@ -88,19 +83,12 @@ export default function AllCasesPage() {
                       {c.caseNumber}
                     </Link>
                   </td>
-                  <td>{c.type}</td>
+                  
                   <td>
-                    <span
-                      className={`badge ${
-                        c.status === "closed"
-                          ? "bg-secondary"
-                          : c.status === "active"
-                          ? "bg-success"
-                          : "bg-warning text-dark"
-                      }`}
-                    >
-                      {c.status}
-                    </span>
+                  <span className={`badge bg-${getStatusColor(c.status)}`}>
+                    {c.status}
+                  </span>
+
                   </td>
                   <td>{c.date}</td>
                   <td>{c.assignedTo || <em>Unassigned</em>}</td>
@@ -123,4 +111,18 @@ export default function AllCasesPage() {
       </div>
     </>
   );
+}
+
+
+function getStatusColor(status: string) {
+  switch (status.toLowerCase()) {
+    case "active":
+      return "warning";
+    case "under investigation":
+      return "info";
+    case "closed":
+      return "success";
+    default:
+      return "secondary";
+  }
 }
