@@ -5,31 +5,13 @@ import { redirect, json } from "@remix-run/node";
 
 type Case = {
   caseNumber: string;
+  type: "Missing";
   status: string;
   date: string;
   assignedTo?: string | null;
 };
 
-const allCases: Case[] = [
-  {
-    caseNumber: "MSP-2025-00A7",
-    status: "pending",
-    date: "2025-04-19",
-    assignedTo: null,
-  },
-  {
-    caseNumber: "UNP-2025-00B3",
-    status: "active",
-    date: "2025-03-10",
-    assignedTo: "Agent007",
-  },
-  {
-    caseNumber: "UNC-2025-00C2",
-    status: "closed",
-    date: "2025-02-15",
-    assignedTo: null,
-  },
-];
+
 
 export async function loader({ request }: { request: Request }) {
   const { data: {session} } = await supabase.auth.getSession();
@@ -47,17 +29,40 @@ export async function loader({ request }: { request: Request }) {
     return redirect("/lead/unauthorized");
   }
 
+  const { data: caseData, error: caseError } = await supabase
+    .from("missing_persons")
+    .select("case_number, status, date_of_last_contact, officer_id, profiles:officer_id (username)");
+
+  if (caseError) {
+    console.error("Error fetching cases:", caseError);
+    return json({
+      user: session.user,
+      role: profile.role,
+      name: profile.username || "agent",
+      cases: [],
+    });
+  }
+  
+  const cases: Case[] = (caseData || []).map((c) => ({
+    caseNumber: c.case_number,
+    type: "Missing",
+    status: c.status,
+    date: c.date_of_last_contact,
+    assignedTo: c.profiles?.username || null,
+  }));
+
   return json({
     user: session.user,
     role: profile.role,
     name: profile.username || "agent",
+    cases,
   });
 }
 
 
 
 export default function AllCasesPage() {
-  const { name } = useLoaderData<typeof loader>();
+  const { cases } = useLoaderData<typeof loader>();
   return (
     <>
       <AgentNavbar />
@@ -76,7 +81,7 @@ export default function AllCasesPage() {
               </tr>
             </thead>
             <tbody>
-              {allCases.map((c) => (
+              {cases.map((c) => (
                 <tr key={c.caseNumber}>
                   <td>
                     <Link to={`/cases/${c.caseNumber}`} className="fw-bold">
