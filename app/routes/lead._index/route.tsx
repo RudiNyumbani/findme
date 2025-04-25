@@ -218,7 +218,7 @@ export default function AgentDashboard() {
 
         {/* Add more quick actions if needed */}
         <div className="d-flex gap-3 flex-wrap">
-          <Link to="/lead/all-cases" className="btn btn-outline-info w-100">
+          <Link prefetch="intent" to="/lead/all-cases" className="btn btn-outline-info w-100">
             📚 View All Cases
           </Link>
           
