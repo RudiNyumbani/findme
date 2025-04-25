@@ -1,4 +1,4 @@
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, Form, useFetcher } from "@remix-run/react";
 import AgentNavbar from "~/components/lead-navbar";
 import { supabase } from "~/utils/supabaseClient";
 import { redirect, json } from "@remix-run/node";
@@ -59,10 +59,39 @@ export async function loader({ request }: { request: Request }) {
   });
 }
 
+export async function action({ request }: { request: Request }) {
+  const formData = await request.formData();
+  const caseNumber = formData.get("caseNumber");
+
+  const { data: { session },} = await supabase.auth.getSession();
+  if (!session) {
+    return redirect("/login");
+  }
+
+  const { data: profile, error } = await supabase
+    .from("profiles")
+    .select("id, role")
+    .eq("id", session.user.id)
+    .single();
+
+  if (error || profile?.role !== "agent") {
+    return redirect("/lead/unauthorized");
+  }
+
+  await supabase
+    .from("missing_persons")
+    .update({ officer_id: session.user.id })
+    .eq("case_number", caseNumber);
+
+  return redirect("/lead/all-cases");
+}
+
 
 
 export default function AllCasesPage() {
   const { cases } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher();
+
   return (
     <>
       <AgentNavbar />
@@ -99,9 +128,13 @@ export default function AllCasesPage() {
                   <td>{c.assignedTo || <em>Unassigned</em>}</td>
                   <td>
                     {!c.assignedTo ? (
-                      <button className="btn btn-sm btn-primary">
+                      <fetcher.Form method="post">
+                        <input type="hidden" name="caseNumber" value={c.caseNumber} />
+                        <button className="btn btn-sm btn-primary" type="submit">
                         ✅ Take Case
                       </button>
+                      </fetcher.Form>
+                    
                     ) : (
                       <button className="btn btn-sm btn-outline-secondary" disabled>
                         Assigned
