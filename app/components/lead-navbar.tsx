@@ -22,12 +22,12 @@ export default function AgentNavbar() {
         <div className="collapse navbar-collapse" id="agentNavbar">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="nav-link" to="/lead">
+              <Link prefetch="intent" className="nav-link" to="/lead">
                 🏠 Dashboard
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/lead/all-cases">
+              <Link prefetch="intent" className="nav-link" to="/lead/all-cases">
                 📚 All Cases
               </Link>
             </li>
