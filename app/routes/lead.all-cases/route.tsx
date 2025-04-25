@@ -1,7 +1,9 @@
-import { Link, useLoaderData, Form, useFetcher } from "@remix-run/react";
+import { Link, useLoaderData, useFetcher } from "@remix-run/react";
 import AgentNavbar from "~/components/lead-navbar";
 import { supabase } from "~/utils/supabaseClient";
 import { redirect, json } from "@remix-run/node";
+import { useEffect, useState } from "react";
+import { Toast, ToastContainer } from "react-bootstrap";
 
 type Case = {
   caseNumber: string;
@@ -13,7 +15,7 @@ type Case = {
 
 
 
-export async function loader({ request }: { request: Request }) {
+export async function loader() {
   const { data: {session} } = await supabase.auth.getSession();
   if (!session) {
     return redirect("/login");
@@ -83,7 +85,7 @@ export async function action({ request }: { request: Request }) {
     .update({ officer_id: session.user.id })
     .eq("case_number", caseNumber);
 
-  return redirect("/lead/all-cases");
+  return json({ success: true}, {status: 200});
 }
 
 
@@ -91,6 +93,14 @@ export async function action({ request }: { request: Request }) {
 export default function AllCasesPage() {
   const { cases } = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
+
+  const [showToast, setShowToast] = useState(false);
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data && !fetcher.data.error) {
+      setShowToast(true);
+    }
+  }, [fetcher.state, fetcher.data]);
+
 
   return (
     <>
@@ -147,6 +157,26 @@ export default function AllCasesPage() {
           </table>
         </div>
       </div>
+      <ToastContainer
+        className="position-fixed top-50 start-50 translate-middle p-3"
+        style={{ zIndex: 9999 }}
+      >
+        <Toast
+          show={showToast}
+          onClose={() => setShowToast(false)}
+          delay={3000}
+          autohide
+          bg="success"
+        >
+          <Toast.Header closeButton>
+            <strong className="me-auto">Case Assigned</strong>
+          </Toast.Header>
+          <Toast.Body className="text-white">
+            ✅ Case assigned successfully!
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
+
     </>
   );
 }
