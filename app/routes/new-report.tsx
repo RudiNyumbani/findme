@@ -2,13 +2,47 @@ import { useState } from "react";
 import Navbar from "~/components/navbar"; // Import Navbar
 import { supabase } from "~/utils/supabaseClient"; // Get the supabaseclient
 import { json, useFetcher  } from "@remix-run/react";
+import { Form } from "react-bootstrap"; // Import Form from react-bootstrap
 
 
 
 export async function action({ request }) {
   const formData = await request.formData();
-  const dataObject = Object.fromEntries(formData.entries());
+  
+  const file = formData.get("photo"); // Get the file from the form data
 
+  // upload the file to supabase storage
+  if ( !file || typeof file === "string") {
+    return json ({ success: false, error: "Invalid file" }, { status: 400 });
+  }
+
+  const fileExt = (file as File).name.split(".").pop();
+  const fileName = `${Date.now()}.${fileExt}`;
+
+  const { data:uploadData , error: uploadError } = await supabase.storage
+    .from("missing-persons-photos")
+    .upload(fileName, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+  if (uploadError) {
+    console.error(uploadError);
+    return json({ success: false, error: "Failed to upload photo" }, { status: 500 });
+  }
+
+  const { data: publicUrlData } = supabase.storage
+    .from("missing-persons-photos")
+    .getPublicUrl(fileName);
+
+  const photoUrl = publicUrlData?.publicUrl || null;
+  if (!photoUrl) {
+    return json({ success: false, error: "Failed to get public URL" }, { status: 500 });
+  }
+  
+  
+  const dataObject = Object.fromEntries(formData.entries());
+  
   const supabaseData = {
     legal_first_name: dataObject.firstname,
     legal_last_name: dataObject.lastname,
@@ -25,6 +59,7 @@ export async function action({ request }) {
     emergency_contacts: dataObject.emcont || null,
     possible_locations: dataObject.posloc || null,
     circumstances: dataObject.circ || null,
+    photo_url: photoUrl,
   };
 
   const { error } = await supabase.from("missing_persons").insert([supabaseData]);
@@ -66,7 +101,7 @@ export default function NewReportForm() {
     <Navbar />
     <div className="container pt-5 mt-5">
       <h2 className="mb-4">New Missing Person Report</h2>
-      <fetcher.Form method="post">
+      <fetcher.Form method="post" encType="multipart/form-data">
         {/* Basic Info Section */}
         <div className="mb-3">
           <label htmlFor="firstname" className="form-label">Legal First Name</label>
@@ -122,6 +157,12 @@ export default function NewReportForm() {
           />
         </div>
 
+        <Form.Group controlId="photo" className="mb-3">
+          <Form.Label>Photo of the Missing Person</Form.Label>
+          <Form.Control type="file" name="photo" accept="image/*" required />
+        </Form.Group>
+
+
         {/* Reporter Info */}
         <div className="mb-3">
           <label htmlFor="repname" className="form-label">Reporter’s Name (Optional)</label>
@@ -173,7 +214,7 @@ export default function NewReportForm() {
         </button>
         
         {/* Success/Error Message */}
-        {fetcher.data?.success && <p className="text-successs mt-3">Report submitted successfully!</p>}
+        {fetcher.data?.success && <p className="text-success mt-3">Report submitted successfully!</p>}
         {fetcher.data?.error && <p className="text-danger mt-3">Error: {fetcher.data.error}</p>}
       </fetcher.Form>
     </div>
