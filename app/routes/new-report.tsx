@@ -41,9 +41,8 @@ export async function action({ request }) {
   }
   
   
-
-
   const dataObject = Object.fromEntries(formData.entries());
+  
   const supabaseData = {
     legal_first_name: dataObject.firstname,
     legal_last_name: dataObject.lastname,
