@@ -1,52 +1,39 @@
 import {
+  isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "@remix-run/react";
-import { useEffect } from "react";
-import type { LinksFunction } from "@remix-run/node";
+} from "react-router";
 
-import Footer from "~/components/footer"; // Import Footer
+import type { Route } from "./+types/root";
+import "./app.css";
 
-
-// Import Bootstrap CSS
-import "bootstrap/dist/css/bootstrap.min.css";
-// Import styling for DataTables globaly
-import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
-
-export const links: LinksFunction = () => [
-  // Haven't found a usecase for this just yet
-  // but keeping it just incase I find one and to keep remix happy!
+export const links: Route.LinksFunction = () => [
+  { rel: "preconnect", href: "https://fonts.googleapis.com" },
+  {
+    rel: "preconnect",
+    href: "https://fonts.gstatic.com",
+    crossOrigin: "anonymous",
+  },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+  },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-// Ensure Bootstrap JS loads only in the browser
-// Import Bootstrap JavaScript bundle manually since we're serving our own files 
-// instead of using a CDN. This ensures all Bootstrap components (e.g., dropdowns, modals) work.
-// We're using a dynamic import to avoid TypeScript errors related to missing type definitions.
-  useEffect(() => {
-    import("bootstrap/dist/js/bootstrap.bundle.min.js");
-  }, []);
-
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
-        <Links /> {/* Remix will inject styles from `links()` here */}
+        <Links />
       </head>
-      <body className="bg-dark text-white d-flex flex-column min-vh-100">
-
-        {/* Page Content */}
-        <main className="flex-grow-1">
-          {children}
-        </main>
-
-        <Footer />
-
+      <body>
+        {children}
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -56,4 +43,33 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return <Outlet />;
+}
+
+export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+  let message = "Oops!";
+  let details = "An unexpected error occurred.";
+  let stack: string | undefined;
+
+  if (isRouteErrorResponse(error)) {
+    message = error.status === 404 ? "404" : "Error";
+    details =
+      error.status === 404
+        ? "The requested page could not be found."
+        : error.statusText || details;
+  } else if (import.meta.env.DEV && error && error instanceof Error) {
+    details = error.message;
+    stack = error.stack;
+  }
+
+  return (
+    <main className="pt-16 p-4 container mx-auto">
+      <h1>{message}</h1>
+      <p>{details}</p>
+      {stack && (
+        <pre className="w-full p-4 overflow-x-auto">
+          <code>{stack}</code>
+        </pre>
+      )}
+    </main>
+  );
 }
