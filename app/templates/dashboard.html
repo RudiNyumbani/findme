@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="text-3xl font-bold mb-4">Dashboard</h2>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <!-- Example card -->
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h3 class="card-title">John Doe</h3>
+            <p>Last seen: Nairobi, 2 days ago</p>
+            <div class="card-actions justify-end">
+                <button class="btn btn-sm btn-outline">View</button>
+                <button class="btn btn-sm btn-accent">Update</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copy cards to simulate multiple cases -->
+</div>
+{% endblock %}
