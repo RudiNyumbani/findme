@@ -1,7 +1,8 @@
-node_modules
-
-/.cache
-/build
+.DS_Store
 .env
-.vscode
-supabase
+.env.local
+/node_modules/
+
+# React Router
+/.react-router/
+/build/

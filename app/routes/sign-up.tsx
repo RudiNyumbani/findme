@@ -1,11 +1,4 @@
-import {
-  data,
-  Link,
-  redirect,
-  useFetcher,
-  useSearchParams,
-  type ActionFunctionArgs,
-} from 'react-router'
+import { Link, redirect, useFetcher, useSearchParams, type ActionFunctionArgs } from 'react-router'
 
 import { createClient } from '~/lib/supabase/server'
 import { Button } from '~/components/ui/button'
@@ -20,31 +13,43 @@ import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const { supabase } = createClient(request)
+
+  const url = new URL(request.url)
+  const origin = url.origin
+
   const formData = await request.formData()
+
   const email = formData.get('email') as string
+  const password = formData.get('password') as string
+  const repeatPassword = formData.get('repeat-password') as string
 
-  const { supabase, headers } = createClient(request)
-  const origin = new URL(request.url).origin
+  if (!password) {
+    return {
+      error: 'Password is required',
+    }
+  }
 
-  // Send the actual reset password email
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${origin}/auth/confirm?next=/update-password`,
+  if (password !== repeatPassword) {
+    return { error: 'Passwords do not match' }
+  }
+
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: `${origin}/protected`,
+    },
   })
 
   if (error) {
-    return data(
-      {
-        error: error instanceof Error ? error.message : 'An error occurred',
-        data: { email },
-      },
-      { headers }
-    )
+    return { error: error.message }
   }
 
-  return redirect('/forgot-password?success')
+  return redirect('/sign-up?success')
 }
 
-export default function ForgotPassword() {
+export default function SignUp() {
   const fetcher = useFetcher<typeof action>()
   let [searchParams] = useSearchParams()
 
@@ -59,23 +64,21 @@ export default function ForgotPassword() {
           {success ? (
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl">Check Your Email</CardTitle>
-                <CardDescription>Password reset instructions sent</CardDescription>
+                <CardTitle className="text-2xl">Thank you for signing up!</CardTitle>
+                <CardDescription>Check your email to confirm</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  If you registered using your email and password, you will receive a password reset
-                  email.
+                  You&apos;ve successfully signed up. Please check your email to confirm your
+                  account before signing in.
                 </p>
               </CardContent>
             </Card>
           ) : (
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl">Reset Your Password</CardTitle>
-                <CardDescription>
-                  Type in your email and we&apos;ll send you a link to reset your password
-                </CardDescription>
+                <CardTitle className="text-2xl">Sign up</CardTitle>
+                <CardDescription>Create a new account</CardDescription>
               </CardHeader>
               <CardContent>
                 <fetcher.Form method="post">
@@ -90,9 +93,21 @@ export default function ForgotPassword() {
                         required
                       />
                     </div>
+                    <div className="grid gap-2">
+                      <div className="flex items-center">
+                        <Label htmlFor="password">Password</Label>
+                      </div>
+                      <Input id="password" name="password" type="password" required />
+                    </div>
+                    <div className="grid gap-2">
+                      <div className="flex items-center">
+                        <Label htmlFor="repeat-password">Repeat Password</Label>
+                      </div>
+                      <Input id="repeat-password" name="repeat-password" type="password" required />
+                    </div>
                     {error && <p className="text-sm text-red-500">{error}</p>}
                     <Button type="submit" className="w-full" disabled={loading}>
-                      {loading ? 'Sending...' : 'Send reset email'}
+                      {loading ? 'Creating an account...' : 'Sign up'}
                     </Button>
                   </div>
                   <div className="mt-4 text-center text-sm">
